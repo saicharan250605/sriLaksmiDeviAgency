@@ -1,0 +1,16 @@
+<% if(success && success.length){%>
+    <div id="flash-success-message-div">
+        <div id="flash-success-message">
+            <p id= "flash_para"><%=success%></p>
+        </div>
+    </div>
+    <script src="/JS/flashMsg.js"></script>
+<% } %>
+<% if(error && error.length){ %>
+    <div id="flash-error-message-div">
+        <div id="flash-error-message">
+            <p id= "flash_para"><%=error%></p>
+        </div>
+    </div>
+    <script src="/JS/flashMsg.js"></script>
+<% } %> 

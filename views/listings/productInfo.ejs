@@ -1,0 +1,170 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="subProductsOuterDivContainer" style="margin-top: 35px;">
+        <div id="subProductsOuterDiv">
+            <div id="subProductsInnerDiv1">
+                <img src=<%=result1.image.url%> alt="" class="mainProductSmallerImage">
+                <span style="font-size: 27px;"><%= result1.name%></span>
+                <a href="/allInvoices/indProduct/<%=result1._id%>" id="allInvoicesBtn"><div>All Invoices</div></a>
+                <%if(reqUser !== undefined){%><div id="addInvoiceBtn">Add Invoice</div> <%}%>
+                <%if(reqUser !== undefined){%><div id="addSubProductBtn">Add sub product</div> <%}%>
+                <%if(reqUser !== undefined){%>
+                    <form action="/delete/product/<%=result1._id%>?_method=DELETE" method="post" id="productDeleteForm">
+                        <div id="deleteProductBtn">Delete</div>
+                    </form>
+                <%}%>
+            </div>
+            <div id="subProductsInnerDiv2">
+                <div id="subProductsInnerDiv2Table">
+                    <div id="subProductsTableHeading">
+                        <div <%if(reqUser == undefined){%>style="flex: 0 0 28%;padding-left:50px;"<%}else{%>style="flex: 0 0 28%;padding-left:50px;"<%}%>>Sub product name</div>
+                        <div <%if(reqUser == undefined){%>style="flex: 0 0 24%;text-align:center;"<%}else{%>style="flex: 0 0 20%;text-align:center;"<%}%>>Life time stock</div>
+                        <div <%if(reqUser == undefined){%>style="flex: 0 0 24%;text-align:center;"<%}else{%>style="flex: 0 0 20%;text-align:center;"<%}%>>Sold stock</div>
+                        <div <%if(reqUser == undefined){%>style="flex: 0 0 24%;text-align:center;"<%}else{%>style="flex: 0 0 20%;text-align:center;"<%}%>>Available stock</div>
+                        <%if(reqUser !== undefined){%> <div style="flex: 0 0 12%;">Delete</div> <%}%>
+                    </div>
+                    <div id="subProductsTableData">
+                        <% for(let i of result2){ %>
+                            <div class="indSubProductsData">
+                                <div <%if(reqUser == undefined){%>style="flex: 0 0 28%;padding-left:50px;"<%}else{%>style="flex: 0 0 28%;padding-left:50px;"<%}%>><a href="/subProduct/info/<%=result1._id%>/<%=i._id%>"><%=i.name%></a></div>
+                                <div <%if(reqUser == undefined){%>style="flex: 0 0 24%;text-align:center;"<%}else{%>style="flex: 0 0 20%;text-align:center;"<%}%>><%=i.total%></div>
+                                <div <%if(reqUser == undefined){%>style="flex: 0 0 24%;text-align:center;"<%}else{%>style="flex: 0 0 20%;text-align:center;"<%}%>><%=i.sold%></div>
+                                <div <%if(reqUser == undefined){%>style="flex: 0 0 24%;text-align:center;"<%}else{%>style="flex: 0 0 20%;text-align:center;"<%}%>><%=i.available%></div>
+                                <%if(reqUser !== undefined){%>
+                                    <div style="flex: 0 0 12%;">
+                                        <form action="/delete/subProduct/<%=result1._id%>/<%=i._id%>?_method=DELETE" method="post" class="subProductDeleteForm">
+                                            <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                                        </form>
+                                    </div>
+                                <%}%>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="/addSubproduct/<%=result1._id%>" id="subProductAddForm" method="post">
+        <i class="fa-solid fa-xmark xmark_addSubProduct"></i>
+        <label for="subProductInput">Sub product Name</label>
+        <span style="color:red;display:none;font-size: 14px;">Sub product already exists</span>
+        <input type="text" placeholder="Enter sub product name" name="subProduct" id="subProductInput" required>
+        <button id="addSubproductBtn">Add</button>
+    </form>
+    <div id="invoiceAddDiv">
+        <i class="fa-solid fa-xmark xmark_addInvoice"></i>
+        <div id="importInvoice_formFetchBtn">Import Invoice</div>
+        <div id="exportInvoice_formFetchBtn">Export Invoice</div>
+        <div id="indSalesInvoice_formFetchBtn">Individual Sales Invoice</div>
+    </div>
+    <form action="/add/imports/<%=result1._id%>" method="post" id="importInvoice_form">
+        <fieldset id="importInvoice_form_fieldset">
+            <legend>Import Invoice</legend>
+            <i class="fa-solid fa-xmark xmark_import"></i>
+            <label for="importing_date">Imported Date</label><input type="date" id="importing_date" name="importing[date]" required>
+            <label for="importing_place">Imported From</label><input type="text" id="importing_place" name="importing[place]" placeholder="Enter place of import" required>
+            <label for="importing_invoice">Invoice Number</label><input type="text" id="importing_invoice" name="importing[invoice]" placeholder="Enter invoice number" required>
+            <button type="button" id="add_subproduct_select_btn_import">Add Item +</button>
+            <span style="color:red;font-size: 14px;display:none;">Please select an item first</span>
+            <div id="selectingProduct_import"></div>
+            <div style="display:flex;column-gap: 10%;">
+                <div style="width:45%;">
+                    <label for="cgst_import">cgst (in % )</label>
+                    <input style="width: 97%;" type="Number" step="any" id="cgst_import" name="importing[cgst]" required placeholder="Enter cgst percentage">
+                </div>
+                <div style="width:45%">
+                    <label for="sgst_import">sgst (in % )</label>
+                    <input style="width: 97%;" type="Number" step="any" id="sgst_import" name="importing[sgst]" required placeholder="Enter sgst percentage">
+                </div>
+            </div>
+            <label for="importing_totalSpendable">Total Amount</label>
+            <input type="number" step="any" id="importing_totalSpendable" name="importing[totalSpendable]" placeholder="Enter total amount to be paid" required>
+            <label for="importing_paid">Amount paid</label>
+            <input type="number" id="importing_paid" name="importing[paid]" placeholder="Enter amount paid" required>
+            <input type="number" step="any" id="balance_importamount" name="importing[balance]" style="display: none;">
+            <button type="submit" id="import_form_submit_button">create invoice</button>
+        </fieldset>
+    </form>
+    <form action="/add/exports/<%=result1._id%>" method="post" id="exportInvoice_form" >
+        <fieldset id="exportInvoice_form_fieldset">
+            <legend>Export Invoice</legend>
+            <i class="fa-solid fa-xmark xmark_export"></i>    
+            <label for="date_export">Date</label>
+            <input type="date" id="date_export" name="exporting[date]" required>
+            <label for="dealer_export">Dealer Name</label>
+            <select name="exporting[dealer]" id="dealer_export" required>
+                <option value="" hidden disable>Select a dealer name</option>
+                <% for(let indDealer of allDealers){ %>
+                    <option value="<%=indDealer.name%>"><%=indDealer.name%></option>
+                <% } %>
+            </select>
+            <label for="export_invoice_number">Invoice Number</label>
+            <input type="text" id="export_invoice_number" name="exporting[invoice]" placeholder="Enter invoice number" required>
+            <button type="button" id="add_subproduct_select_btn">Add Item +</button>
+            <span style="color:red;font-size: 14px;display:none;">Please select an item first</span>
+            <div id="selectingProduct_export"></div>
+            <div style="display:flex;column-gap: 10%;">
+                <div style="width:45%;">
+                    <label for="cgst_export">cgst (in % )</label>
+                    <input style="width: 97%;" type="Number" step="any" id="cgst_export" name="exporting[cgst]" required placeholder="Enter cgst percentage">
+                </div>
+                <div style="width:45%">
+                    <label for="sgst_export">sgst (in % )</label>
+                    <input style="width: 97%;" type="Number" step="any" id="sgst_export" name="exporting[sgst]" required placeholder="Enter sgst percentage">
+                </div>
+            </div>
+            <label for="totalReceivable_exportamount">Receivable Amount</label>
+            <input type="Number" step="any" id="totalReceivable_exportamount" name="exporting[totalReceivable]" required placeholder="Enter total amount to be received">
+            <label for="">Received Amount</label>
+            <input type="Number" step="any" id="received_exportamount" name="exporting[received]" required placeholder="Enter total amount received">
+            <input type="Number" step="any" id="balance_exportamount" name="exporting[balance]" style="display: none;">
+            <button type="submit" id="export_form_submit_btn">create invoice</button>
+        </fieldset>
+    </form>
+    <form action="/add/indSales/<%=result1._id%>" id="indSalesInvoice_form" method="post">
+        <fieldset id="indSalesInvoice_form_fieldset">
+            <legend>Individual Sales Invoice</legend>
+            <i class="fa-solid fa-xmark xmark_indSales"></i>    
+            <label for="date_indSales">Date</label>
+            <input type="date" id="date_indSales" name="indSales[date]" required>
+            <label for="customer_indSales">Buyer Name</label>
+            <input type="text" name="indSales[name]" placeholder="Enter buyer name">
+            <label for="indSales_invoice_number">Invoice Number</label>
+            <input type="text" id="indSales_invoice_number" name="indSales[invoice]" placeholder="Enter invoice number" required>
+            <button type="button" id="add_subproduct_select_btn_indSales">Add Item +</button>
+            <span style="color:red;font-size: 14px;display:none;">Please select an item first</span>
+            <div id="selectingProduct_indSales"></div>
+            <div style="display:flex;column-gap: 10%;">
+                <div style="width:45%;">
+                    <label for="cgst_indSales">cgst (in % )</label>
+                    <input style="width: 97%;" type="Number" step="any" id="cgst_indSales" name="indSales[cgst]" required placeholder="Enter cgst percentage">
+                </div>
+                <div style="width:45%">
+                    <label for="sgst_indSales">sgst (in % )</label>
+                    <input style="width: 97%;" type="Number" step="any" id="sgst_indSales" name="indSales[sgst]" required placeholder="Enter sgst percentage">
+                </div>
+            </div>
+            <label for="totalReceivable_indSales_amount">Receivable Amount</label>
+            <input type="Number" step="any" id="totalReceivable_indSales_amount" name="indSales[totalReceivable]" required placeholder="Enter total amount to be received">
+            <label for="received_indSales_amount">Received Amount</label>
+            <input type="Number" step="any" id="received_indSales_amount" name="indSales[received]" required placeholder="Enter total amount received">
+            <button type="submit" id="indSales_form_submit_btn">create invoice</button>
+        </fieldset>
+    </form>
+    <div id="deleteConfirmation_div">
+        <i class="fa-solid fa-xmark xmark_del_product"></i>
+        <span>Are you sure, you want to delete product "<%=result1.name%>"?</span>
+        <div id="deleteConfirm_btn">Delete</div>
+    </div>
+    <div id="deleteConfirmation_div_subproduct">
+        <i class="fa-solid fa-xmark xmark_del_subProduct"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_subProduct">Delete</div>
+    </div>
+    <script>
+        const allSubProducts = <%-JSON.stringify(result2)%>;
+        const allItems = <%-JSON.stringify(result3)%>;
+        const allsubProducts_of_allProducts = <%-JSON.stringify(allsubProducts_of_allProducts)%>;
+    </script>
+    <script src="/JS/addSubProduct.js"></script>
+</body> 

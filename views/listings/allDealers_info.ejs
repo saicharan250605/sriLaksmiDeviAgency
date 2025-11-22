@@ -1,0 +1,57 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="allDealers_table_holder" style="margin-top: 35px;">
+        <table id="allDealers_table">
+            <tr class="all_dealers_table_rows" style="background: linear-gradient(125deg, #00c8ff61, #0073ff58, #6b11cb46, #b9137156);">
+                <th>Dealer Name</th>
+                <th>City</th>
+                <th>Shop Name</th>
+                <th>GST Number</th>
+                <%if(reqUser !== undefined){%><th>Delete</th><%}%>
+            </tr>
+            <% for(let indDealer of allDealersObjects){ %>
+                <tr class="all_dealers_table_rows">
+                    <td class="all_dealers_table_rows_data"><a class="all_dealers_table_anchor_tag" href="/allexp/dealer/<%=indDealer._id%>"><%=indDealer["name"]%></a></td>
+                    <td class="all_dealers_table_rows_data"><%=indDealer["city"]%></td>
+                    <td class="all_dealers_table_rows_data"><%=indDealer["shopName"]%></td>
+                    <td class="all_dealers_table_rows_data"><%=indDealer["gstNumber"]%></td>
+                    <%if(reqUser !== undefined){%> <td class="all_dealers_table_rows_data">
+                        <form action="/delete/dealer/<%=indDealer._id%>?_method=DELETE" method="post" class="dealerDeleteForm">
+                            <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                        </form>
+                    </td> <%}%>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+    <div id="deleteConfirmation_div_dealer">
+        <i class="fa-solid fa-xmark xmark_del_dealer"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_dealer">Delete</div>
+    </div>
+    <script>
+        const dealerDeleteForm = document.querySelectorAll(".dealerDeleteForm");
+        const deleteConfirmation_div_dealer = document.querySelector("#deleteConfirmation_div_dealer");
+        const xmark_del_dealer = document.querySelector(".xmark_del_dealer");
+        const deleteConfirm_btn_dealer = document.querySelector("#deleteConfirm_btn_dealer");
+        const allDealers_table_holder = document.querySelector("#allDealers_table_holder");
+        const navbar = document.querySelector("#navbar");
+        for(let i of dealerDeleteForm){
+            i.children[0].addEventListener('click',dealerDelete_handler);
+        }
+        xmark_del_dealer.addEventListener("click",()=>{
+            allDealers_table_holder.style.display="flex";
+            deleteConfirmation_div_dealer.style.display="none";
+            navbar.style.pointerEvents="all";
+        });
+        function dealerDelete_handler(event){
+            navbar.style.pointerEvents="none";
+            allDealers_table_holder.style.display="none";
+            deleteConfirmation_div_dealer.style.display="flex";
+            deleteConfirmation_div_dealer.children[1].innerText=`Are you sure, you want to delete dealer "${event.target.parentElement.parentElement.parentElement.children[0].innerText}"?`;
+            deleteConfirm_btn_dealer.addEventListener("click",()=>{
+                event.target.parentElement.submit();
+            });
+        }
+    </script>
+</body>

@@ -1,0 +1,642 @@
+*{
+    font-family: "Noto Sans", sans-serif;
+}
+#Add_product_type_form_container,#Add_dealer_form_container{
+    display: flex;
+    justify-content: center;
+}
+#Add_product_type_form,#Add_dealer_form{
+    display: flex;
+    flex-direction: column;
+    width:30%;
+    background-color: whitesmoke;
+    border:1px solid black;
+    padding:15px 15px 20px 15px;
+    border-radius: 10px;
+    row-gap: 10px;
+}
+input{
+    min-height:30px !important;
+    font-size:15px;
+    margin-bottom: 15px;
+    margin-top:3px;
+    border-radius: 5px;
+    border:1px solid gray;
+}
+#productImage{
+    width:45%;
+    border:none;
+    cursor: pointer;
+}
+#preview{
+    height:169px;
+    width:200px;
+    border-radius: 7px;
+    display: none;
+}
+#addProduct_btn{
+    width:100px;
+    height:35px;
+    font-size: 17px;
+    border-radius: 7px;
+    border:none;
+    cursor: pointer;
+    margin-left: auto;
+    background-color: lime;
+    color:black;
+}
+#addDealer_btn{
+    width:100px;
+    height:35px;
+    font-size: 17px;
+    border-radius: 7px;
+    border:none;
+    cursor: pointer;
+    margin-left: auto;
+    background-color: royalblue;
+    color:white;
+}
+#addProduct_btn:hover,#addDealer_btn:hover{
+    scale:1.03;
+}
+
+
+/********************************** SUB PRODUCTS ADD FORM *********************************/
+#subProductAddForm{
+    position: absolute;
+    left:50%;
+    top:50%;
+    height:190px;
+    width:250px;
+    flex-direction: column;
+    transform: translate(-50%, -50%);
+    border:1px solid black;
+    row-gap: 8px;
+    border-radius: 7px;
+    box-sizing: border-box;
+    padding:12px 12px 0 12px;
+    background-color: whitesmoke;
+    display: none;
+}
+#addSubproductBtn{
+    background-color: #2563eb;
+    color: #ffffff;  
+    font-size: 18px;
+    font-weight: 500;
+    border:none;
+    width:100px;
+    height:30px;
+    border-radius: 7px;
+    margin-left: auto;
+    cursor:pointer;
+}
+.xmark_addSubProduct{
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 18px;
+    color:gray;
+}
+
+/************************************** ITEMS ADD FORM ***********************************/
+#itemAddForm{
+    position: absolute;
+    left:50%;
+    top:50%;
+    height:190px;
+    width:250px;
+    flex-direction: column;
+    transform: translate(-50%, -50%);
+    border:1px solid black;
+    row-gap: 8px;
+    border-radius: 7px;
+    box-sizing: border-box;
+    padding:12px 12px 0 12px;
+    background-color: whitesmoke;
+    display: none;
+}
+#addItemBtn{
+    background-color:lime;
+    color: #ffffff;  
+    font-size: 18px;
+    font-weight: 500;
+    border:none;
+    width:100px;
+    height:30px;
+    border-radius: 7px;
+    margin-left: auto;
+    cursor:pointer;
+}
+.xmark_addItem{
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 18px;
+    color:gray;
+}
+
+/******************************** IMPORTS ADD FORM ********************************/
+#importInvoice_form{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:500px;
+    height:560px;
+    transform: translate(-50%,-50%);
+    display:none;
+}
+#importInvoice_form_fieldset{
+    height:100%;
+    width:100%;
+    overflow: auto;
+    border-radius: 7px;
+    border:1px solid gray;
+    display:flex;
+    flex-direction: column;
+}
+#add_subproduct_select_btn_import{
+    font-size: 17px;
+    width:130px;
+    height:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #2ff1b4, #05ae76);
+    color:white;
+    border:none;
+    cursor: pointer;
+    transition: all linear 0.3s;
+}
+#import_form_submit_button{
+    background: linear-gradient(135deg, #fead98, #ff6589);
+    color: #ffffff;
+    border:none;
+    min-height:35px;
+    width:150px;
+    border-radius: 7px;
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all linear 0.3s;
+}
+#import_form_submit_button:hover,#add_subproduct_select_btn_import:hover{
+    scale:1.03;
+}
+#selectingProduct_import{
+    margin-top:15px;
+}
+#importInvoice_form_fieldset::-webkit-scrollbar {
+  width: 8px;
+}
+#importInvoice_form_fieldset::-webkit-scrollbar-track{
+    opacity: 0;
+}
+#importInvoice_form_fieldset::-webkit-scrollbar-thumb{
+    background-color:rgb(208, 207, 207);
+    border-radius: 15px;
+}
+
+/******************************** EXPORTS ADD FORM ********************************/
+#exportInvoice_form{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:500px;
+    height:580px;
+    transform: translate(-50%,-50%);
+    display:none;
+}
+#exportInvoice_form_fieldset{
+    height:100%;
+    width:100%;
+    overflow: auto;
+    border-radius: 7px;
+    border:1px solid gray;
+    display:flex;
+    flex-direction: column;
+}
+#add_subproduct_select_btn{
+    font-size: 17px;
+    width:130px;
+    height:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color:black;
+    border:none;
+    cursor: pointer;
+    transition: all linear 0.3s;
+}
+#export_form_submit_btn{
+    background-color: #2563eb;
+    border:none;
+    color:white;
+    min-height:35px;
+    width:150px;
+    border-radius: 5px;
+    font-size: 17px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+#add_subproduct_select_btn:hover{
+    scale:1.04;
+}
+#dealer_export{
+    margin-bottom: 20px;
+    height:25px;
+    border:1px solid gray;
+    border-radius: 4px;
+}
+#selectingProduct_export{
+    margin-top: 15px;
+}
+#exportInvoice_form_fieldset::-webkit-scrollbar {
+  width: 8px;
+}
+#exportInvoice_form_fieldset::-webkit-scrollbar-track{
+    opacity: 0;
+}
+#exportInvoice_form_fieldset::-webkit-scrollbar-thumb{
+    background-color:rgb(208, 207, 207);
+    border-radius: 15px;
+}
+
+/********************************* SALES ADD FORM ********************************/
+#indSalesInvoice_form{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:500px;
+    height:570px;
+    transform: translate(-50%,-50%);
+    display: none;
+}
+#indSalesInvoice_form_fieldset{
+    height:100%;
+    width:100%;
+    overflow: auto;
+    border-radius: 7px;
+    border:1px solid gray;
+    display:flex;
+    flex-direction: column;
+}
+#add_subproduct_select_btn_indSales{
+    font-size: 17px;
+    width:130px;
+    height:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    color:white;
+    border:none;
+    cursor: pointer;
+    transition: all linear 0.3s;
+}
+#indSales_form_submit_btn{
+    background: linear-gradient(135deg, #3a7bd5, #3a6073);
+    border:none;
+    color:white;
+    min-height:35px;
+    width:150px;
+    border-radius: 5px;
+    font-size: 17px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+#selectingProduct_indSales{
+    margin-top: 15px;
+}
+#indSalesInvoice_form_fieldset::-webkit-scrollbar {
+  width: 8px;
+}
+#indSalesInvoice_form_fieldset::-webkit-scrollbar-track{
+    opacity: 0;
+}
+#indSalesInvoice_form_fieldset::-webkit-scrollbar-thumb{
+    background-color:rgb(208, 207, 207);
+    border-radius: 15px;
+}
+/******************************** ADD INVOICE ***********************************/
+#invoiceAddDiv{
+    position: absolute;
+    left:50%;
+    top:50%;
+    height:220px;
+    width:250px;
+    flex-direction: column;
+    transform: translate(-50%, -50%);
+    border:1px solid black;
+    border-radius: 7px;
+    box-sizing: border-box;
+    background-color: whitesmoke;
+    display: none;
+    justify-content: space-evenly;
+    align-items: center;
+}
+#invoiceAddDiv > *:not(:first-child){
+    border: 1px solid gray;
+    border-radius: 7px;
+    cursor: pointer;
+    height:20%;
+    width:90%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.xmark_addInvoice,.xmark_export,.xmark_import,.xmark_indSales{
+    margin: 0 5px 0 auto;
+    cursor: pointer;
+    font-size: 18px;
+    color:gray;
+}
+
+/* ///////////////////////////////////////// */
+#deleteConfirmation_div{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_subproduct{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_item{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_import{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_export{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_indSales{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_dealer{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirmation_div_dealer_invoice{
+    position: absolute;
+    top:50%;
+    left:50%;
+    width:350px;
+    height:150px;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 7px;
+    flex-direction: column;
+    padding:15px;
+    font-size: 16px;
+    background-color: rgb(232, 232, 232);
+    display:none;
+}
+#deleteConfirm_btn{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_subProduct{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_item{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_import{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_export{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_indSales{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_dealer{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+#deleteConfirm_btn_dealer_invoice{
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 10px;
+    background-color: red;
+    color:white;
+    border-radius: 7px;
+    padding:7px 15px;
+    cursor: pointer;
+}
+.xmark_del_product{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_subProduct{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_item{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_import{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_export{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_indSales{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_dealer{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.xmark_del_dealer_invoice{
+    color:gray;
+    margin-left: auto;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+/* ////////////////////////////////////////////////////// LOGIN AND SIGN UP FORM DESIGN /////////////////////////////////////////////// */
+#login_or_sign_up_form_holder{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+#login_or_sign_up_form{
+    width:35%;
+    display: flex;
+    padding:20px 15px 20px 15px;
+    flex-direction: column;
+    border:1px solid black;
+    border-radius: 7px;
+}
+#login_or_sign_up_submit_btn{
+    width:20%;
+    background: linear-gradient(135deg, #c471f5, #fa71cd);
+    color:white;
+    cursor: pointer;
+    height:35px;
+    font-size: 18px;
+    margin-left: auto;
+    margin-top:10px;
+    border-radius: 7px;
+    border:none;
+    transition:all linear 0.3s;
+}
+#login_or_sign_up_submit_btn:hover{
+    scale:1.07;
+}

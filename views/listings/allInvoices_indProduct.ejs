@@ -1,0 +1,253 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="allInvoices_outerContainer" style="margin-top: 35px;">
+        <div id="allInvoices_innerContainer1">
+            <img src=<%=productImageLink%> alt="" class="mainProductSmallerImage" style=" box-shadow:
+                0 0 4px rgb(103, 232, 249),
+                0 0 6px rgb(147, 197, 253),
+                0 0 8px rgb(249, 168, 212);">
+            <span style="font-size: 27px;
+                font-weight: 550;
+                background: linear-gradient(to right, rgb(103, 232, 249), rgb(147, 197, 253), rgb(249, 168, 212));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                color: transparent;"> <%=productName%> <span style="font-size:22px;">>> Invoices List</span>
+            </span>
+        </div>
+        <div id="allInvoices_innerContainer2">
+            <div id="indProduct_allImports_invoices_container">
+                <table id="imports_table">
+                    <caption style="background: linear-gradient(to right, rgb(59, 130, 246), rgb(37, 99, 235));">Imports Invoices</caption>
+                    <tr class="all_invoices_rows" style="background: linear-gradient(to right, rgb(219, 234, 254), rgb(207, 250, 254));">
+                        <th>Date</th>
+                        <th>Place</th>
+                        <th>Invoice Number</th>
+                        <th>Total Amount</th>
+                        <th>Paid</th>
+                        <th>Balance</th>
+                        <th>Download Invoice</th>
+                        <%if(reqUser !== undefined){%> <th>Delete</th> <%}%>
+                    </tr>
+                    <% for(i of importsList){ %>
+                        <tr class="all_invoices_rows" style="position:relative;" class="importRows">
+                            <td class="all_invoices_data_rows"><%= new Date(i.date).toLocaleDateString()%></td>
+                            <td class="all_invoices_data_rows"><%= i.place %></td>
+                            <td class="all_invoices_data_rows"><%= i.invoice %></td>
+                            <td class="all_invoices_data_rows"><%= i.totalSpendable.toFixed(3) %></td>
+                            <td class="all_invoices_data_rows"><%= i.paid.toFixed(3) %></td>
+                            <td class="all_invoices_data_rows"><%= i.balance.toFixed(3) %></td>
+                            <td class="all_invoices_data_rows" style="font-size: 25px;cursor:pointer;color:brown;">
+                                <i class="fa-solid fa-download"></i>
+                                <div>
+                                    <div style="display: flex;align-items: center;border-bottom: 1px solid white;height:35px;">
+                                        <div style="width:31%;color:#67e8f9">Item</div>
+                                        <div style="width:23%;color:#67e8f9">Count</div>
+                                        <div style="width:23%;color:#67e8f9">Ind item cost</div>
+                                        <div style="width:23%;color:#67e8f9">Total Cost</div>
+                                    </div>
+                                <%for(j of i.productsBought){ %>
+                                    <div style="display: flex">
+                                        <div style="width:31%;color:#e0e2e3;<%if(j.itemName.length>12){%>font-size:12px;<%}%>"><%=j.itemName%></div>
+                                        <div style="width:23%;color:#e0e2e3"><%=j.number%></div>
+                                        <div style="width:23%;color:#e0e2e3"><%=j.amount.toFixed(3)%></div>
+                                        <div style="width:23%;color:#86efac"><%=(Number(j.number)*Number(j.amount)).toFixed(3)%></div>
+                                    </div>
+                                <% } %>
+                                    <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                                        <div style="width:50%;text-align: right;margin-left:auto;color:#fde047">Total ( before gst ) :</div>
+                                        <div style="width:25%;color:#86efac"><%=((i.totalSpendable*100)/(100+i.cgst+i.sgst)).toFixed(3)%></div>
+                                    </div>
+                                    <div style="display:flex;flex-direction: column;border-top:1px solid white;color:#ffab91;row-gap: 5px;">
+                                        <div style="display: flex; margin-left:30%;width:70%">
+                                            <div style="width:33%;">cgst</div>
+                                            <div style="width:34%;"><%=i.cgst%> %</div>
+                                            <div style="width:33%;color:#ffb74d;"><%=(((i.totalSpendable*100)/(100+i.cgst+i.sgst))*(i.cgst/100)).toFixed(3)%></div>
+                                        </div>
+                                        <div style="display: flex;margin-left:30%;width: 70%;">
+                                            <div style="width:33%;">sgst</div>
+                                            <div style="width:34%;"><%=i.sgst%> %</div>
+                                            <div style="width:33%;color:#ffb74d;"><%=(((i.totalSpendable*100)/(100+i.cgst+i.sgst))*(i.sgst/100)).toFixed(3)%></div>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                                        <div style="width:25%;margin-left:auto;color:#fde047">Total:</div>
+                                        <div style="width:25%;color:#86efac"><%=(i.totalSpendable).toFixed(3)%></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <%if(reqUser !== undefined){%>
+                                <td class="all_invoices_data_rows">
+                                    <form action="/delete/import/<%=i._id%>?_method=DELETE" method="post" class="importForms">
+                                        <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                                    </form>
+                                </td> 
+                            <%}%>
+                        </tr>
+                    <% } %>
+                </table>
+            </div>
+            <div id="indProduct_allExports_invoices_container">
+                <table id="exports_table">
+                    <caption style="background: linear-gradient(to right, rgb(34, 197, 94), rgb(5, 150, 105));">Exports Invoices</caption>
+                    <tr class="all_invoices_rows" style="background: linear-gradient(to right, rgb(220, 252, 231), rgb(209, 250, 229));">
+                        <th>Date</th>
+                        <th>Dealer</th>
+                        <th>Invoice</th>
+                        <th>Total Amount</th>
+                        <th>Received</th>
+                        <th>Balance</th>
+                        <th>Download Invoice</th>
+                        <%if(reqUser !== undefined){%><th>Delete</th><%}%>
+                    </tr>
+                    <% for(i of exportsList){ %>
+                    <tr class="all_invoices_rows" style="position:relative;" class="exportRows">
+                        <td class="all_invoices_data_rows"><%= new Date(i.date).toLocaleDateString()%></td>
+                        <td class="all_invoices_data_rows"><%= i.dealer %></td>
+                        <td class="all_invoices_data_rows"><%= i.invoice %></td>
+                        <td class="all_invoices_data_rows"><%= i.totalReceivable.toFixed(3) %></td>
+                        <td class="all_invoices_data_rows"><%= i.received.toFixed(3) %></td>
+                        <td class="all_invoices_data_rows"><%= i.balance.toFixed(3) %></td>
+                        <td class="all_invoices_data_rows" style="font-size: 25px;cursor:pointer;color:brown">
+                            <i class="fa-solid fa-download"></i>
+                            <div>
+                                <div style="display: flex;align-items: center;border-bottom: 1px solid white;height:35px;">
+                                    <div style="width:31%;color:#67e8f9">Item</div>
+                                    <div style="width:23%;color:#67e8f9">Count</div>
+                                    <div style="width:23%;color:#67e8f9">Ind item cost</div>
+                                    <div style="width:23%;color:#67e8f9">Total Cost</div>
+                                </div>
+                            <%for(j of i.productSold){ %>
+                                <div style="display: flex">
+                                    <div style="width:31%;color:#e0e2e3;<%if(j.itemName.length>12){%>font-size:12px;<%}%>"><%=j.itemName%></div>
+                                    <div style="width:23%;color:#e0e2e3"><%=j.number%></div>
+                                    <div style="width:23%;color:#e0e2e3"><%=j.indCost.toFixed(3)%></div>
+                                    <div style="width:23%;color:#86efac"><%=(Number(j.number)*Number(j.indCost)).toFixed(3)%></div>
+                                </div>
+                            <% } %>
+                                <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                                    <div style="width:50%;text-align: right;margin-left:auto;color:#fde047">Total ( before gst ) :</div>
+                                    <div style="width:25%;color:#86efac"><%=((i.totalReceivable*100)/(100+i.cgst+i.sgst)).toFixed(3)%></div>
+                                </div>
+                                <div style="display:flex;flex-direction: column;border-top:1px solid white;color:#ffab91;row-gap: 5px;">
+                                    <div style="display: flex; margin-left:30%;width:70%">
+                                        <div style="width:33%;">cgst</div>
+                                        <div style="width:34%;"><%=i.cgst%> %</div>
+                                        <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.cgst/100)).toFixed(3)%></div>
+                                    </div>
+                                    <div style="display: flex;margin-left:30%;width: 70%;">
+                                        <div style="width:33%;">sgst</div>
+                                        <div style="width:34%;"><%=i.sgst%> %</div>
+                                        <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.sgst/100)).toFixed(3)%></div>
+                                    </div>
+                                </div>
+                                <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                                    <div style="width:25%;margin-left:auto;color:#fde047">Total:</div>
+                                    <div style="width:25%;color:#86efac"><%=(i.totalReceivable).toFixed(3)%></div>
+                                </div>
+                            </div>
+                        </td>
+                        <%if(reqUser !== undefined){%>
+                            <td class="all_invoices_data_rows">
+                                <form action="/delete/export/<%=i._id%>?_method=DELETE" method="post" class="exportForms">
+                                    <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                                </form>
+                            </td>
+                        <%}%>
+                    </tr>
+                    <% } %>
+                </table>
+            </div>
+            <div id="indProduct_allIndSales_invoices_container">
+                <table id="indSales_table">
+                    <caption style="background:linear-gradient(to right, rgb(168, 85, 247), rgb(219, 39, 119));">Individual Sales Invoices</caption>
+                    <tr class="all_invoices_rows" style="background: linear-gradient(to right, rgb(243, 232, 255), rgb(252, 231, 243));">
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Invoice</th>
+                        <th>Total Amount</th>
+                        <th>Received</th>
+                        <th>Download Invoice</th>
+                        <%if(reqUser !== undefined){%><th>Delete</th><%}%>
+                    </tr>
+                    <% for(i of indSalesList){ %>
+                    <tr class="all_invoices_rows" style="position:relative;" class="indSalesRows">
+                        <td class="all_invoices_data_rows"><%= new Date(i.date).toLocaleDateString()%></td>
+                        <td class="all_invoices_data_rows"><%= i.name %></td>
+                        <td class="all_invoices_data_rows"><%= i.invoice %></td>
+                        <td class="all_invoices_data_rows"><%= i.totalReceivable.toFixed(3) %></td>
+                        <td class="all_invoices_data_rows"><%= i.received.toFixed(3) %></td>
+                        <td class="all_invoices_data_rows" style="font-size: 25px;cursor:pointer;color:brown">
+                            <i class="fa-solid fa-download"></i>
+                            <div>
+                                <div style="display: flex;align-items: center;border-bottom: 1px solid white;height:35px;">
+                                    <div style="width:31%;color:#67e8f9">Item</div>
+                                    <div style="width:23%;color:#67e8f9">Count</div>
+                                    <div style="width:23%;color:#67e8f9">Ind item cost</div>
+                                    <div style="width:23%;color:#67e8f9">Total Cost</div>
+                                </div>
+                            <%for(j of i.productSold){ %>
+                                <div style="display: flex">
+                                    <div style="width:31%;color:#e0e2e3;<%if(j.itemName.length>12){%>font-size:12px;<%}%>"><%=j.itemName%></div>
+                                    <div style="width:23%;color:#e0e2e3"><%=j.number%></div>
+                                    <div style="width:23%;color:#e0e2e3"><%=j.indCost.toFixed(3)%></div>
+                                    <div style="width:23%;color:#86efac"><%=(Number(j.number)*Number(j.indCost)).toFixed(3)%></div>
+                                </div>
+                            <% } %>
+                                <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                                    <div style="width:50%;text-align: right;margin-left:auto;color:#fde047">Total ( before gst ) :</div>
+                                    <div style="width:25%;color:#86efac"><%=((i.totalReceivable*100)/(100+i.cgst+i.sgst)).toFixed(3)%></div>
+                                </div>
+                                <div style="display:flex;flex-direction: column;border-top:1px solid white;color:#ffab91;row-gap: 5px;">
+                                    <div style="display: flex; margin-left:30%;width:70%">
+                                        <div style="width:33%;">cgst</div>
+                                        <div style="width:34%;"><%=i.cgst%> %</div>
+                                        <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.cgst/100)).toFixed(3)%></div>
+                                    </div>
+                                    <div style="display: flex;margin-left:30%;width: 70%;">
+                                        <div style="width:33%;">sgst</div>
+                                        <div style="width:34%;"><%=i.sgst%> %</div>
+                                        <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.sgst/100)).toFixed(3)%></div>
+                                    </div>
+                                </div>
+                                <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                                    <div style="width:25%;margin-left:auto;color:#fde047">Total:</div>
+                                    <div style="width:25%;color:#86efac"><%=(i.totalReceivable).toFixed(3)%></div>
+                                </div>
+                            </div>
+                        </td>
+                        <%if(reqUser !== undefined){%>
+                            <td class="all_invoices_data_rows">
+                                <form action="/delete/indSales/<%=i._id%>?_method=DELETE" method="post" class="indSalesForms">
+                                    <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                                </form>
+                            </td>
+                        <%}%>
+                    </tr>
+                    <% } %>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmation_div_import">
+        <i class="fa-solid fa-xmark xmark_del_import"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_import">Delete</div>
+    </div>
+    <div id="deleteConfirmation_div_export">
+        <i class="fa-solid fa-xmark xmark_del_export"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_export">Delete</div>
+    </div>
+    <div id="deleteConfirmation_div_indSales">
+        <i class="fa-solid fa-xmark xmark_del_indSales"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_indSales">Delete</div>
+    </div>
+    <script src="/JS/allInvoices_indProduct.js"></script>
+    <script>
+        const dealersList = <%-JSON.stringify(dealersList)%>;
+    </script>
+    <script src="/JS/invoiceDownload.js"></script>
+</body>

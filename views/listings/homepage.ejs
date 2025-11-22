@@ -1,0 +1,18 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="allProductsList" style="margin-top: 35px;">
+        <% for(let indProduct of result){ %>
+            <a href="/ProductInfo/<%=indProduct._id%>" class="indProducts">
+                <div class="indProductImage">
+                    <img src=<%=indProduct.image.url%> alt="" class="allImages">
+                </div>
+                <div class="indProductName"><%=indProduct.name%></div>
+                <div class="indProductDescription">
+                    <span class="indProductDescription1">Lifetime stock: <span style="margin-left: auto;"><%=indProduct.total%></span></span>
+                    <span class="indProductDescription2">Sold stock: <span style="margin-left: auto;"><%=indProduct.sold%></span></span>
+                    <span class="indProductDescription3">Available stock: <span style="margin-left: auto;"><%=indProduct.available%></span></span>
+                </div>
+            </a>
+        <% } %>
+    </div>
+</body>

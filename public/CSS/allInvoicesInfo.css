@@ -1,0 +1,127 @@
+#allInvoices_outerContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 30px;
+}
+#allInvoices_innerContainer1{
+    width:90%;
+    height:100px;
+    background: linear-gradient(135deg, #03284c, #003366 40%, #507297 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding:0 20px 0 10px;
+    column-gap: 13px;
+}
+#allInvoices_innerContainer2{
+    width:90%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+#indProduct_allImports_invoices_container, #indProduct_allExports_invoices_container, #indProduct_allIndSales_invoices_container{
+    width:100%;
+    margin-bottom: 30px;
+}
+#imports_table{
+    width:100%;
+    border: black;
+}
+#exports_table{
+    width:100%;
+    border: black;
+}
+#indSales_table{
+    width:100%;
+    border: black;
+}
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+th{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.all_invoices_rows{
+    height:45px;
+}
+.all_invoices_data_rows {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    cursor: pointer;
+}
+.all_invoices_data_rows > div{
+    height:auto;
+    width:470px;
+    font-size: 15px;
+    position:absolute;
+    background: linear-gradient(120deg, #001f3f, #003366 40%, #001933 100%);
+    top:0;
+    left:0;
+    border-radius: 7px;
+    flex-direction: column;
+    row-gap: 10px;
+    display:flex;
+    z-index: 9999;
+    opacity:0;
+    transform: scale(0.95); 
+    pointer-events: none;
+    transition:all 0.3s ease-in-out;
+    box-shadow:
+    0 15px 20px rgba(0, 0, 0, 0.6),  /* heavy drop shadow */
+    0 0 15px rgba(0, 51, 102, 0.5);  /* faint outer glow */
+}
+.all_invoices_rows:hover > .all_invoices_data_rows > div{
+    opacity:1;
+    transform: scale(1); 
+}
+caption{
+    font-size: 22px;
+    font-weight: 550;
+    margin-bottom: 15px;
+    color:white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    height:50px;
+    box-sizing: border-box;
+    padding-top:7px;
+    align-items: center;
+}
+
+/* //////////////////////////////////////////////// ALL DEALERS INVOICES INGOFO //////////////////////////////////////////// */
+
+.all_dealers_table_rows{
+    height:45px;
+}
+.all_dealers_table_rows_data{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+.all_dealers_table_anchor_tag{
+    text-decoration: none;
+    color:black;
+    cursor:pointer;
+}
+#allDealers_table_holder{
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+#allDealers_table{
+    width:80%;
+}
+#indDealer_invoicesHolder{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#indDealer_exports_table{
+    width:90%;
+}

@@ -1,0 +1,27 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="Add_product_type_form_container" style="margin-top: 35px;">
+        <form action="/addProduct" method="post" enctype="multipart/form-data" id="Add_product_type_form">
+            <label for="productType">Product Type</label>
+            <span style="color:red;display:none;font-size: 14px;">Product already exists</span>
+            <input type="text" placeholder="Enter product type" id="productType" name="productType" required>
+            <label for="hsn_number">HSN Number</label>
+            <input type="number" placeholder="Enter HSN number" name="hsn" id="hsn_number" required>
+            <label for="productImage">Add image</label>
+            <input type="file" id="productImage" name="productImage" required>
+            <img src="" alt="" id="preview">
+            <button id="addProduct_btn">Add</button>
+        </form>
+    </div>
+    <script src="/JS/addProduct.js"></script>
+    <script>
+        const allProducts = <%-JSON.stringify(allProducts)%>;
+        const Add_product_type_form = document.querySelector("#Add_product_type_form");
+        Add_product_type_form.addEventListener("submit",(event)=>{
+            if(allProducts.some(obj => obj.name ==Add_product_type_form.children[2].value.toUpperCase())){
+                event.preventDefault();
+                Add_product_type_form.children[1].style.display="block";
+            }
+        });
+    </script>
+</body>

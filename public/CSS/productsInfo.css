@@ -1,0 +1,172 @@
+#subProductsOuterDivContainer{
+    width:100%;
+    height:auto;
+    display: flex;
+    justify-content: center;
+}
+#subProductsOuterDiv{
+    width:92%;
+    height:auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+#subProductsInnerDiv1{
+    width:100%;
+    height:100px;
+    border: 1px solid blue;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding:0 20px 0 10px;
+    column-gap: 13px;
+}
+#subProductsInnerDiv2{
+    width:100%;
+    height:auto;
+    border:1px solid blue;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+#subProductsInnerDiv2Table{
+    display:flex;
+    flex-direction: column;
+}
+#subProductsTableHeading{
+    display: flex;
+    font-size: 20px;
+    font-weight: 550;
+    border-bottom: 1px solid blue;
+    box-sizing: border-box;
+    padding:10px 0;
+}
+#subProductsTableHeading > *, .indSubProductsData > *{
+    /* flex: 0 0 20%;   don’t grow, don’t shrink, fixed 20% width */
+    box-sizing: border-box;
+}
+#subProductsTableHeading > *:not(:first-child), .indSubProductsData > *:not(:first-child){
+    text-align: center;
+}
+#subProductsTableData{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.indSubProductsData{
+    display: flex;
+    font-size: 17px;
+    position:relative;
+    align-items: center;
+    z-index:1;
+    padding:10px 0;
+    box-sizing: border-box;
+}
+.indSubProductsData:not(:last-child)::after{
+    position: absolute;
+    content: "";
+    bottom:0;
+    left:50px;
+    height:1px;
+    width:91%;
+    background-color: darkgray;
+}
+.indSubProductsData > * >*{
+    text-decoration: none;
+    color:black;
+}
+.mainProductSmallerImage{
+    height:80px;
+    width:70px;
+    border-radius: 7px;
+}
+#addSubProductBtn{
+    background: linear-gradient(135deg, #943d73, #7a204f, #b0327d);
+    color:white;
+    padding:10px 15px;
+    text-decoration: none;
+    border-radius: 12px;
+    cursor:pointer;
+    transition: all 0.4s linear;
+}
+#addInvoiceBtn{
+    background: linear-gradient(135deg, #1a1f71, #472e8c, #5f2f78);
+    color:white;
+    padding:10px 15px;
+    text-decoration: none;
+    border-radius: 12px;
+    cursor:pointer;
+    transition: all 0.4s linear;
+}
+#deleteProductBtn{
+    background: linear-gradient(135deg, #ff0844, #ffb199);
+    color:white;
+    padding:10px 18px;
+    text-decoration: none;
+    border-radius: 12px;
+    cursor:pointer;
+    font-size: 16px;
+    transition: all 0.4s linear;
+    border:none;
+}
+#allInvoicesBtn{
+    background: linear-gradient(135deg, #ffb347, #ffcc33, #fdaa44);
+    color:#1a1a1a;
+    padding:10px 15px;
+    text-decoration: none;
+    border-radius: 12px;
+    margin-left: auto;
+    cursor:pointer;
+    font-weight: 600;
+    transition: all 0.4s linear;
+    
+}
+#addSubProductBtn:hover,#addInvoiceBtn:hover,#allInvoicesBtn:hover,#deleteProductBtn:hover{
+    scale:1.03;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);  
+}
+#importInvoice_formFetchBtn{
+    background: linear-gradient(135deg, #0f9b0f, #3cba92, #30cfd0);
+    color:white;
+}
+#exportInvoice_formFetchBtn{
+    background: linear-gradient(135deg, #00416a, #486b7a, #2c5364);
+    color:white;
+}
+#indSalesInvoice_formFetchBtn{
+    background: linear-gradient(135deg, #ff512f, #dd2476, #b02e0c);
+    color:white;
+}
+#slectingProduct_export{
+    display: flex;
+    flex-direction: column;
+}
+.minidiv{
+    display: flex;
+    column-gap: 10%;
+    row-gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid orange;
+}
+.minidiv >select{
+    width:45%;
+    border:1px solid gray;
+}
+.mindiv2{
+    display: flex;
+    flex-direction: column;
+    row-gap: 3px;
+    width:45%;
+    box-sizing: border-box;
+}
+.mindiv4{
+    display: flex;
+    column-gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.mindiv4 >input{
+    margin-bottom: 0;
+}

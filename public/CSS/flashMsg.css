@@ -1,0 +1,93 @@
+#flash-success-message-div,#flash-error-message-div{
+    height:50px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+#flash-success-message{
+    width:50%;
+    height:inherit;
+    display:flex;
+    position:relative;
+    background-color:rgba(0, 128, 0, 0.200);
+    border:1px solid green;
+    color:green;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius:7px;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+}
+#flash-success-message::after{
+    position: absolute;
+    top:47px;
+    left:0;
+    content:"";
+    width:3%;
+    height:3px;
+    background-color:green;
+    animation: anime1 3s linear 0s normal forwards;
+}
+#flash-error-message{
+    width:50%;
+    height:inherit;
+    display:flex;
+    position: relative;
+    background-color:rgba(128, 0, 0, 0.271);
+    border:1px solid rgb(219, 6, 6);
+    color:rgb(169, 4, 4);
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius:7px;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+}
+#flash-error-message::after{
+    position: absolute;
+    top:47px;
+    left:0;
+    content:"";
+    width:3%;
+    height:3px;
+    background-color:maroon;
+    animation: anime1 3s linear 0s normal forwards;
+}
+@keyframes anime1 {
+    from{
+        width:3%;
+    }
+    to{
+        width:100%;
+    }
+}
+
+/* ////////////////////////////////////////////////////////// ERROR HANDLING/////////////////////////////////////////////// */
+
+#error-message-div{
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+#error-message{
+    width:60%;
+    height:auto;
+    display:flex;
+    background-color:rgba(128, 0, 0, 0.271);
+    border:1px solid rgb(219, 6, 6);
+    color:rgb(169, 4, 4);
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius:7px;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+    padding:12px 0;
+    font-size:20px;
+    margin: 0;
+}
+
+@media(max-width:550px){
+    #flash-success-message,#flash-error-message{
+        width:95% !important;
+        font-size: 18px;
+    }
+}

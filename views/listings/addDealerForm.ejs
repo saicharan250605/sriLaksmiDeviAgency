@@ -1,0 +1,29 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="Add_dealer_form_container" style="margin-top: 35px;">
+        <form action="/addDealer" method="post" id="Add_dealer_form">
+            <label for="dealerName">Dealer name</label>
+            <span style="color:red;display:none;font-size: 14px;">Dealer already exists</span>
+            <input type="text" placeholder="Enter Dealer Name" id="dealerName" name="dealer[name]" required>
+            <label for="shop_name">Shop name</label>
+            <input type="text" placeholder="Enter Shop Name" name="dealer[shopName]" id="shop_name" required>
+            <label for="dealer_city">City</label>
+            <input type="text" id="dealer_city" name="dealer[city]" placeholder="Enter city name of the dealer" required>
+            <!-- <label for="dealer_gst">Mobile Number</label>
+            <input type="number" id="dealer_mobile" name="dealer[mobile]" placeholder="Enter GST number of the dealer" required> -->
+            <label for="dealer_gst">GST Number</label>
+            <input type="text" id="dealer_gst" name="dealer[gstNumber]" placeholder="Enter GST number of the dealer" required>
+            <button id="addDealer_btn">Add</button>
+        </form>
+    </div>
+    <script>
+        const allDealers = <%-JSON.stringify(allDealers)%>;
+        const Add_dealer_form = document.querySelector("#Add_dealer_form");
+        Add_dealer_form.addEventListener("submit",(event)=>{
+            if(allDealers.some(obj => obj.name == Add_dealer_form.children[2].value.toUpperCase())){
+                event.preventDefault();
+                Add_dealer_form.children[1].style.display="block";
+            }
+        });
+    </script>
+</body>

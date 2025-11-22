@@ -1,0 +1,20 @@
+<div id="navbar">
+    <div id="iconContainer">
+        <div id="icon_holder"></div>
+    </div>
+    <div id="allLinksContainer">
+        <a href="/" id="allProducts"><div>All Product types</div></a>
+        <%if(reqUser != undefined){%> <a href="/addProduct" id="addProduct"><div>Add Product type</div></a> <%}%>
+        <%if(reqUser != undefined){%> <a href="/addDealer" id="addDealer"><div>Add Dealer</div></a> <%}%>
+        <a href="/allDealersInvoicelist" id="allDealersInvoiceList"><div>All Dealers Invoice Lists</div></a>
+    </div>
+    <div id="loginBtnContainer">    
+        <%if(reqUser == undefined){%>
+            <div id="login_btn"><a href="/loginPageRender">Login</a></div>
+            <div id="sign_up_btn"><a href="/signupPageRender">Sign up</a></div>
+        <%}else{%>
+            <div id="logout_btn"><a href="/logout">Logout</a></div>
+        <%}%>
+    </div>
+</div>
+<script></script>

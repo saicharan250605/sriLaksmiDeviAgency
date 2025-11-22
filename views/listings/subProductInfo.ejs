@@ -1,0 +1,60 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="itemsOuterDivContainer" style="margin-top: 35px;">
+        <div id="itemsOuterDiv">
+            <div id="itemsInnerDiv1">
+                <img src=<%=result1.image.url%> alt="" class="mainProductSmallerImage">
+                <span style="font-size: 27px;"><%= result1.name%></span>
+                <span style="font-size: 20px;font-weight: 500;">>> <%= result2.name%></span>
+                <%if(reqUser !== undefined){%><div id="additemBtn">Add item</div> <%}%>
+            </div>
+            <div id="itemsInnerDiv2">
+                <% for( i of result3){ %>
+                    <div class="indItem">
+                        <div style="height:100%;width:100%;">
+                            <div class="itemData_name_container">
+                                <span class="itemData_name"><%=i.name%></span>
+                                <%if(reqUser !== undefined){%>
+                                    <form action="/delete/item/<%=result1._id%>/<%=result2._id%>/<%=i._id%>?_method=DELETE" method="post" class="itemDeleteForm" style="margin-left: auto;margin-right: 10px;font-size: 15px;">
+                                        <i class="fa-solid fa-trash-can item-delete-logo" style="color:red;cursor:pointer;"></i>
+                                    </form>
+                                <%}%>
+                            </div>
+                            <div class="itemData_container">
+                                <div class="itemData" style="background-color: rgb(210, 210, 254);">
+                                    <div style="width:75%;display: flex;align-items: center;">Life time stock:</div>
+                                    <div style="width:25%;display: flex;align-items: center;"><%=i.total%></div>
+                                </div>
+                                <div class="itemData" style="background-color: rgb(251, 216, 216);">
+                                    <div style="width:75%;display: flex;align-items: center;">Sold Stock:</div>
+                                    <div style="width:25%;display: flex;align-items: center;"><%=i.sold%></div>
+                                </div>
+                                <div class="itemData" style="background-color: rgb(207, 251, 207);">
+                                    <div style="width:75%;display: flex;align-items: center;">Available Stock:</div>
+                                    <div style="width:25%;display: flex;align-items: center;"><%=i.available%></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <form action="/addItem/<%=result1._id%>/<%=result2._id%>" id="itemAddForm" method="post">
+        <i class="fa-solid fa-xmark xmark_addItem"></i>
+        <label for="itemInput">Item Name</label>
+        <span style="color:red;display:none;font-size: 14px;">Item already exists</span>
+        <input type="text" placeholder="Enter item name" name="item" id="itemInput" required>
+        <button id="addItemBtn">Add</button>
+    </form>
+    <div id="deleteConfirmation_div_item">
+        <i class="fa-solid fa-xmark xmark_del_item"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_item">Delete</div>
+    </div>
+    <script>
+        const allItems = <%-JSON.stringify(result3)%>;
+        const allItems_of_allProducts = <%-JSON.stringify(allItems_of_allProducts)%>;
+    </script>
+    <script src="/JS/addItem.js"></script>
+</body>

@@ -1,0 +1,119 @@
+body{
+    margin:0 0 50px 0;
+}
+#navbar{
+    width:100%;
+    height:64px;
+    background-color:#4c535e;
+    display: flex;
+    position:sticky;
+    top:0;
+    left:0;
+    z-index: 9999;
+}
+#iconContainer{
+    width:10%;
+    height:100%;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#icon_holder{
+    width:60px;
+    height:60px;
+    border-radius: 50%;
+    background-image: url("/images/lakshmiDevi2.jpg");
+    background-size:cover;
+    cursor:pointer;
+}
+#allLinksContainer{
+    width:70%;
+    height:100%;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    font-size: 20px;
+    column-gap: 25px;
+}
+#addProduct,#allProducts,#addDealer,#allDealersInvoiceList{
+    color:white;
+    text-decoration: none;
+}
+#loginBtnContainer{
+    width:20%;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login_btn{
+    display: flex;
+    font-size: 20px;
+    height:45px;
+    width:120px;
+    border-radius: 15px;
+    background: linear-gradient(125deg, #00c6ff, #0072ff, #6a11cb, #b91372);
+    font-weight: 500;
+    cursor:pointer;
+    margin-right: 15px;
+}
+#login_btn > a{
+    color:white;
+    text-decoration: none;
+    width:100%;
+    height:100%;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#sign_up_btn{
+    display: flex;
+    height:45px;
+    width:120px;
+    font-size: 20px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color:#fff;
+    font-weight: 500;
+    cursor:pointer;
+}
+#sign_up_btn > a{
+    color:white;
+    text-decoration: none;
+    width:100%;
+    height:100%;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#logout_btn{
+    display: flex;
+    height:45px;
+    width:120px;
+    font-size: 20px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);  
+    color:#fff;
+    font-weight: 500;
+    cursor:pointer;
+}
+#logout_btn > a{
+    color:white;
+    text-decoration: none;
+    width:100%;
+    height:100%;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login_btn:hover, #sign_up_btn:hover{
+    scale:1.03;
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}

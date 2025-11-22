@@ -1,0 +1,122 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="indDealer_invoicesHolder" style="margin-top: 35px;">
+        <div style="height:80px; width:100%; display:flex; justify-content: center;margin-bottom: 25px;">
+            <div style="height: 100%;
+            width:90%;
+            border-radius: 7px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:linear-gradient(to right, rgb(103, 232, 249), rgb(147, 197, 253), rgb(249, 168, 212));">
+                <div style="width:99%;
+                height:85%;
+                background-color: white;
+                border-radius: 7px;">
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="indDealer_exports_table">
+            <caption style="background: linear-gradient(to right, rgb(34, 197, 94), rgb(5, 150, 105));">Exports Invoices</caption>
+            <tr class="all_invoices_rows" style="background: linear-gradient(to right, rgb(220, 252, 231), rgb(209, 250, 229));">
+                <th>Date</th>
+                <th>Invoice</th>
+                <th>Total Amount</th>
+                <th>Received</th>
+                <th>Balance</th>
+                <th>Download Invoice</th>
+                <%if(reqUser !== undefined){%> <th>Delete</th><%}%>
+            </tr>
+            <% for(i of currDealerInfo.exports){ %>
+            <tr class="all_invoices_rows" style="position:relative;" class="exportRows">
+                <td class="all_invoices_data_rows"><%= new Date(i.date).toLocaleDateString()%></td>
+                <td class="all_invoices_data_rows"><%= i.invoice %></td>
+                <td class="all_invoices_data_rows"><%= i.totalReceivable.toFixed(3) %></td>
+                <td class="all_invoices_data_rows"><%= i.received.toFixed(3) %></td>
+                <td class="all_invoices_data_rows"><%= i.balance.toFixed(3) %></td>
+                <td class="all_invoices_data_rows" style="font-size: 25px;cursor:pointer;color:brown">
+                    <i class="fa-solid fa-download"></i>
+                    <div>
+                        <div style="display: flex;align-items: center;border-bottom: 1px solid white;height:35px;">
+                            <div style="width:25%;color:#67e8f9">Item</div>
+                            <div style="width:25%;color:#67e8f9">Count</div>
+                            <div style="width:25%;color:#67e8f9">Ind item cost</div>
+                            <div style="width:25%;color:#67e8f9">Total Cost</div>
+                        </div>
+                    <%for(j of i.productSold){ %>
+                        <div style="display: flex">
+                            <div style="width:25%;color:#e0e2e3"><%=j.itemName%></div>
+                            <div style="width:25%;color:#e0e2e3"><%=j.number%></div>
+                            <div style="width:25%;color:#e0e2e3"><%=j.indCost.toFixed(3)%></div>
+                            <div style="width:25%;color:#86efac"><%=(Number(j.number)*Number(j.indCost)).toFixed(3)%></div>
+                        </div>
+                    <% } %>
+                        <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                            <div style="width:50%;text-align: right;margin-left:auto;color:#fde047">Total ( before gst ) :</div>
+                            <div style="width:25%;color:#86efac"><%=((i.totalReceivable*100)/(100+i.cgst+i.sgst)).toFixed(3)%></div>
+                        </div>
+                        <div style="display:flex;flex-direction: column;border-top:1px solid white;color:#ffab91;row-gap: 5px;">
+                            <div style="display: flex; margin-left:25%;width:75%">
+                                <div style="width:33%;">cgst</div>
+                                <div style="width:34%;"><%=i.cgst%> %</div>
+                                <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.cgst/100)).toFixed(3)%></div>
+                            </div>
+                            <div style="display: flex;margin-left:25%;width: 75%;">
+                                <div style="width:33%;">sgst</div>
+                                <div style="width:34%;"><%=i.sgst%> %</div>
+                                <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.sgst/100)).toFixed(3)%></div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
+                            <div style="width:25%;margin-left:auto;color:#fde047">Total:</div>
+                            <div style="width:25%;color:#86efac"><%=(i.totalReceivable).toFixed(3)%></div>
+                        </div>
+                    </div>
+                </td>
+                <%if(reqUser !== undefined){%> <td class="all_invoices_data_rows">
+                    <form action="/delete/export/<%=i._id%>?_method=DELETE" method="post" class="deleteDealer_invoiceForm">
+                        <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                    </form>
+                </td> <%}%>
+            </tr>
+            <% } %>
+        </table>
+    </div>
+    <div id="deleteConfirmation_div_dealer_invoice">
+        <i class="fa-solid fa-xmark xmark_del_dealer_invoice"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_dealer_invoice">Delete</div>
+    </div>
+    <script>
+        const deleteDealer_invoiceForm = document.querySelectorAll(".deleteDealer_invoiceForm");
+        const deleteConfirmation_div_dealer_invoice = document.querySelector("#deleteConfirmation_div_dealer_invoice");
+        const xmark_del_dealer_invoice = document.querySelector(".xmark_del_dealer_invoice");
+        const deleteConfirm_btn_dealer_invoice = document.querySelector("#deleteConfirm_btn_dealer_invoice");
+        const indDealer_invoicesHolder = document.querySelector("#indDealer_invoicesHolder");
+        const navbar = document.querySelector("#navbar");
+        for(let i of deleteDealer_invoiceForm){
+            i.children[0].addEventListener('click',dealerDelete_handler);
+        }
+        xmark_del_dealer_invoice.addEventListener("click",()=>{
+            indDealer_invoicesHolder.style.display="flex";
+            deleteConfirmation_div_dealer_invoice.style.display="none";
+            navbar.style.pointerEvents="all";
+        });
+        function dealerDelete_handler(event){
+            navbar.style.pointerEvents="none";
+            indDealer_invoicesHolder.style.display="none";
+            deleteConfirmation_div_dealer_invoice.style.display="flex";
+            deleteConfirmation_div_dealer_invoice.children[1].innerText=`Are you sure, you want to delete invoice dated on ${event.target.parentElement.parentElement.parentElement.children[0].innerText}?`;
+            deleteConfirm_btn_dealer_invoice.addEventListener("click",()=>{
+                event.target.parentElement.submit();
+            });
+        }
+    </script>
+    <script>
+        const currDealerInfo = <%-JSON.stringify(currDealerInfo)%>; 
+    </script>
+    <script src="/JS/invoiceDownload.js"></script>
+</body>
