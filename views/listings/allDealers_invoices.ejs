@@ -1,7 +1,7 @@
 <% layout("/layouts/boilerPlate") %>
 <body>
     <div id="indDealer_invoicesHolder" style="margin-top: 35px;">
-        <div style="height:80px; width:100%; display:flex; justify-content: center;margin-bottom: 25px;">
+        <div style="height:100px; width:100%; display:flex; justify-content: center;margin-bottom: 25px;">
             <div style="height: 100%;
             width:90%;
             border-radius: 7px;
@@ -10,12 +10,16 @@
             align-items: center;
             background:linear-gradient(to right, rgb(103, 232, 249), rgb(147, 197, 253), rgb(249, 168, 212));">
                 <div style="width:99%;
-                height:85%;
+                height:82%;
                 background-color: white;
-                border-radius: 7px;">
-                    <div>
-
+                border-radius: 7px;
+                display:flex;
+                flex-direction: column;
+                justify-content: center;">
+                    <div style="color: #00BFFF;font-size: 25px;font-weight: 550; margin-left: 20px;text-transform: capitalize;">
+                        Dealer <%=currDealerInfo.name.toLowerCase()%> export invoices
                     </div>
+                    <div style="margin-left: 20px;font-size: 15px;">Manage and track all your export invoices</div>
                 </div>
             </div>
         </div>
@@ -41,17 +45,17 @@
                     <i class="fa-solid fa-download"></i>
                     <div>
                         <div style="display: flex;align-items: center;border-bottom: 1px solid white;height:35px;">
-                            <div style="width:25%;color:#67e8f9">Item</div>
-                            <div style="width:25%;color:#67e8f9">Count</div>
-                            <div style="width:25%;color:#67e8f9">Ind item cost</div>
-                            <div style="width:25%;color:#67e8f9">Total Cost</div>
+                            <div style="width:31%;color:#67e8f9">Item</div>
+                            <div style="width:23%;color:#67e8f9">Count</div>
+                            <div style="width:23%;color:#67e8f9">Ind item cost</div>
+                            <div style="width:23%;color:#67e8f9">Total Cost</div>
                         </div>
                     <%for(j of i.productSold){ %>
                         <div style="display: flex">
-                            <div style="width:25%;color:#e0e2e3"><%=j.itemName%></div>
-                            <div style="width:25%;color:#e0e2e3"><%=j.number%></div>
-                            <div style="width:25%;color:#e0e2e3"><%=j.indCost.toFixed(3)%></div>
-                            <div style="width:25%;color:#86efac"><%=(Number(j.number)*Number(j.indCost)).toFixed(3)%></div>
+                            <div style="width:31%;color:#e0e2e3;<%if(j.itemName.length>12){%>font-size:12px;<%}%>"><%=j.itemName%></div>
+                            <div style="width:23%;color:#e0e2e3"><%=j.number%></div>
+                            <div style="width:23%;color:#e0e2e3"><%=j.indCost.toFixed(3)%></div>
+                            <div style="width:23%;color:#86efac"><%=(Number(j.number)*Number(j.indCost)).toFixed(3)%></div>
                         </div>
                     <% } %>
                         <div style="display:flex;align-items: center;border-top:1px solid white;height:30px;">
@@ -59,12 +63,12 @@
                             <div style="width:25%;color:#86efac"><%=((i.totalReceivable*100)/(100+i.cgst+i.sgst)).toFixed(3)%></div>
                         </div>
                         <div style="display:flex;flex-direction: column;border-top:1px solid white;color:#ffab91;row-gap: 5px;">
-                            <div style="display: flex; margin-left:25%;width:75%">
+                            <div style="display: flex; margin-left:30%;width:70%">
                                 <div style="width:33%;">cgst</div>
                                 <div style="width:34%;"><%=i.cgst%> %</div>
                                 <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.cgst/100)).toFixed(3)%></div>
                             </div>
-                            <div style="display: flex;margin-left:25%;width: 75%;">
+                            <div style="display: flex;margin-left:30%;width: 70%;">
                                 <div style="width:33%;">sgst</div>
                                 <div style="width:34%;"><%=i.sgst%> %</div>
                                 <div style="width:33%;color:#ffb74d;"><%=(((i.totalReceivable*100)/(100+i.cgst+i.sgst))*(i.sgst/100)).toFixed(3)%></div>
