@@ -195,6 +195,7 @@ function input2_importInvoice_form(minidiv){
     minidiv2.setAttribute("class","mindiv2");
     input2_label.innerText="MRP of item";
     input2.setAttribute("placeholder","Enter MRP of item");
+    input2.setAttribute("step","any");
     input2.setAttribute("type","Number");
     input2.setAttribute("required",true);
     input2.setAttribute("name",`importing[productsBought][${productSold_count_import}][mrp]`);
@@ -210,6 +211,7 @@ function input3_importInvoice_form(minidiv){
     input3_label.innerText="Available price of one item";
     input3.setAttribute("placeholder","Enter available price of item");
     input3.setAttribute("type","Number");
+    input3.setAttribute("step","any");
     input3.setAttribute("required",true);
     input3.setAttribute("class","allitems_theirPrice2"); // assigning class, so that later they can be obtained to dynamically change amount in changeAmount2 function
     input3.setAttribute("name",`importing[productsBought][${productSold_count_import}][amount]`);
@@ -471,6 +473,7 @@ function input2_indSalesInvoice_form(minidiv){
     input2_label.innerText="price of one item";
     input2.setAttribute("placeholder","Enter price of single item");
     input2.setAttribute("type","Number");
+    input2.setAttribute("step","any");
     input2.setAttribute("required",true);
     input2.setAttribute("class","allitems_theirPrice3"); // assigning class, so that later they can be obtained to dynamically change amount in changeAmount3 function
     input2.setAttribute("name",`indSales[productSold][${productSold_count_indSales}][indCost]`);
