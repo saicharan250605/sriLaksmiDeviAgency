@@ -173,20 +173,18 @@ app.delete("/delete/product/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
 ///////////////////////////////// ADDING SUB PRODUCT ///////////////////////////////
 app.get("/ProductInfo/:id",asyncwrap(async(req,res)=>{
     let {id} = req.params;
-    let result1 = await productTypeClass.findById(id);
-    let result2 = [];
-    let result3= {};
-    res.locals.allsubProducts_of_allProducts = await subProductTypeClass.find();
-    let foundSubProduct;
-    for(let i of result1.subProducts){
-        foundSubProduct = await subProductTypeClass.findById(i);
-        result2.push(foundSubProduct);
-        result3[foundSubProduct.name]=[];
-        for(i of foundSubProduct.items){
-            let subproducts_items = await itemClass.findById(i);
-            result3[foundSubProduct.name].push(subproducts_items);
+    let result1 = await productTypeClass.findById(id).populate({
+        path:"subProducts",
+        populate:{
+            path:"items"
         }
+    }).lean();
+    let result2 = result1.subProducts;
+    let result3= {};
+    for(let ind_sp of result1.subProducts ){
+        result3[ind_sp.name] = ind_sp.items;
     }
+    res.locals.allsubProducts_of_allProducts = await subProductTypeClass.find();
     res.render("listings/productInfo.ejs",{result1,result2,result3});
 }));
 app.post("/addSubproduct/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
