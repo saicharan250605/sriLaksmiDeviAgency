@@ -228,11 +228,8 @@ app.get("/subProduct/info/:id1/:id2",asyncwrap(async(req,res)=>{
     let {id1,id2} = req.params;
     let result1 = await productTypeClass.findById(id1); 
     let result2 = await subProductTypeClass.findById(id2);
+    let [result3] = await Promise.all([itemClass.find({_id:{$in: result2.items}})]);
     res.locals.allItems_of_allProducts = await itemClass.find();
-    let result3 = [];
-    for(let i of result2.items){
-        result3.push(await itemClass.findById(i));
-    }
     res.render("listings/subProductInfo.ejs",{result1,result2,result3});
 }));
 app.post("/addItem/:id1/:id2",isUserLoggedin,asyncwrap(async(req,res)=>{
