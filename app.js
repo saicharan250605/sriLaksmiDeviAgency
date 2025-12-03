@@ -33,7 +33,7 @@ const dealerClass = require("./models/dealerClass.js");
 const userClass = require("./models/userModel.js");
 
 const port = 8000;
-app.listen(port,()=>{
+app.listen(port,"0.0.0.0",()=>{
     console.log(`Application is live at port ${port}`);
 })
 const databaseURL = process.env.DATABASE_URL;
