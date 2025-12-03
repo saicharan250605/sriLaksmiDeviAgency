@@ -36,7 +36,7 @@ const port = 8000;
 app.listen(port,()=>{
     console.log(`Application is live at port ${port}`);
 })
-const databaseURL = process.env.DataBaseUrl;
+const databaseURL = process.env.DATABASE_URL;
 async function dataBaseLink(){
     await mongoose.connect(databaseURL);
 }
@@ -49,7 +49,7 @@ const mongoStore = require("connect-mongo");
 const store = mongoStore.create({
     mongoUrl: databaseURL,
     crypto:{
-        secret:process.env.secret,
+        secret:process.env.SECRET,
     },
     touchAfter:24*60*60,
 });
@@ -58,7 +58,7 @@ store.on("error",()=>{
 });
 app.use(session({
     store,
-    secret:process.env.secret,
+    secret:process.env.SECRET,
     resave:false,
     saveUninitialized: true,
     cookie:{
