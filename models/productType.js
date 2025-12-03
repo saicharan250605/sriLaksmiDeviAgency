@@ -13,7 +13,7 @@ const productTypeSchema = new mongoose.Schema({
     },
     subProducts:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"subProductTypeClass",
+        ref:"SubProduct",
     }],
     import:[{
         type:mongoose.Schema.Types.ObjectId,

@@ -6,7 +6,7 @@ const subProductTypeSchema = new mongoose.Schema({
     },
     items:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"ItemClass",
+        ref:"Item",
     }],
     total:{
         type:Number
