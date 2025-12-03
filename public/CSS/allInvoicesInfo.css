@@ -78,6 +78,7 @@ th{
 }
 .all_invoices_rows:hover > .all_invoices_data_rows > div{
     opacity:1;
+    pointer-events: all;
     transform: scale(1); 
 }
 caption{
