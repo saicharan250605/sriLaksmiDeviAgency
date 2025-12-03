@@ -33,10 +33,10 @@ const dealerClass = require("./models/dealerClass.js");
 const userClass = require("./models/userModel.js");
 
 const port = 8000;
-app.listen(port,()=>{
+app.listen(port,"0.0.0.0",()=>{
     console.log(`Application is live at port ${port}`);
 })
-const databaseURL = "mongodb://127.0.0.1:27017/SriLakshmiDeviAgencies";
+const databaseURL = process.env.DATABASE_URL;
 async function dataBaseLink(){
     await mongoose.connect(databaseURL);
 }
@@ -49,7 +49,7 @@ const mongoStore = require("connect-mongo");
 const store = mongoStore.create({
     mongoUrl: databaseURL,
     crypto:{
-        secret:process.env.secret,
+        secret:process.env.SECRET,
     },
     touchAfter:24*60*60,
 });
@@ -58,7 +58,7 @@ store.on("error",()=>{
 });
 app.use(session({
     store,
-    secret:process.env.secret,
+    secret:process.env.SECRET,
     resave:false,
     saveUninitialized: true,
     cookie:{
@@ -90,7 +90,7 @@ app.use("/ProductInfo",async(req,res,next)=>{
 });
 app.use("/",(req, res, next) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0'); ///////////////// Important
-    res.setHeader('Pragma', 'no-cache');1
+    res.setHeader('Pragma', 'no-cache');
     return next();
 });
 
@@ -173,18 +173,20 @@ app.delete("/delete/product/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
 ///////////////////////////////// ADDING SUB PRODUCT ///////////////////////////////
 app.get("/ProductInfo/:id",asyncwrap(async(req,res)=>{
     let {id} = req.params;
-    let result1 = await productTypeClass.findById(id).populate({
-        path:"subProducts",
-        populate:{
-            path:"items"
-        }
-    }).lean();
-    let result2 = result1.subProducts;
+    let result1 = await productTypeClass.findById(id);
+    let result2 = [];
     let result3= {};
-    for(let ind_sp of result1.subProducts ){
-        result3[ind_sp.name] = ind_sp.items;
-    }
     res.locals.allsubProducts_of_allProducts = await subProductTypeClass.find();
+    let foundSubProduct;
+    for(let i of result1.subProducts){
+        foundSubProduct = await subProductTypeClass.findById(i);
+        result2.push(foundSubProduct);
+        result3[foundSubProduct.name]=[];
+        for(i of foundSubProduct.items){
+            let subproducts_items = await itemClass.findById(i);
+            result3[foundSubProduct.name].push(subproducts_items);
+        }
+    }
     res.render("listings/productInfo.ejs",{result1,result2,result3});
 }));
 app.post("/addSubproduct/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
@@ -229,7 +231,10 @@ app.get("/subProduct/info/:id1/:id2",asyncwrap(async(req,res)=>{
     let result1 = await productTypeClass.findById(id1); 
     let result2 = await subProductTypeClass.findById(id2);
     res.locals.allItems_of_allProducts = await itemClass.find();
-    let [result3] = await Promise.all([itemClass.find({_id:{$in: result2.items}})]);
+    let result3 = [];
+    for(let i of result2.items){
+        result3.push(await itemClass.findById(i));
+    }
     res.render("listings/subProductInfo.ejs",{result1,result2,result3});
 }));
 app.post("/addItem/:id1/:id2",isUserLoggedin,asyncwrap(async(req,res)=>{
