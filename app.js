@@ -145,26 +145,27 @@ app.post("/addProduct",isUserLoggedin,upload.single("productImage"),asyncwrap(as
 /////////////////////////////////// DELETE PRODUCT ///////////////////////////////
 app.delete("/delete/product/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     const {id} = req.params;
-    const currPro = await productTypeClass.findById(id);
-    for(let i of currPro.subProducts){
-        let currSubPro = await subProductTypeClass.findById(i);
-        for(let j of currSubPro.items){
-            await itemClass.findByIdAndDelete(j);
-        }
-        await subProductTypeClass.findByIdAndDelete(i);
+    let allSP_Ids=[];
+    let allItemIds=[];
+    const currPro = await productTypeClass.findById(id).populate({
+        path:"subProducts",
+    }).lean();
+    for(let ind_sp of currPro.subProducts){
+        allSP_Ids.push(ind_sp._id);
+        allItemIds.push(...ind_sp.items);
     }
-    for(let i of currPro.import){
-        await importClass.findByIdAndDelete(i);
-    }
-    for(let i of currPro.sell){
-        await sellClass.findByIdAndDelete(i);
-    }
+    //deleting all subproducts and all items in the product
+    await subProductTypeClass.deleteMany({_id:{ $in: allSP_Ids}});
+    await itemClass.deleteMany({_id:{ $in: allItemIds}});
+    // deleting all imports, exports and individual sales
+    await importClass.deleteMany({_id:{ $in: currPro.import}});
+    await sellClass.deleteMany({_id:{ $in: currPro.sell}});
     for(let i of currPro.export){
         let currexp = await exportClass.findById(i);
         let currDealer = await dealerClass.findOne({name :currexp.dealer});
         await dealerClass.findByIdAndUpdate(currDealer._id,{$pull:{invoices: i}});
-        await exportClass.findByIdAndDelete(i);
     }
+    await exportClass.deleteMany({_id:{$in:currPro.export}});
     await productTypeClass.findByIdAndDelete(id);
     req.flash("success","product deleted successfully");
     res.redirect("/allLists");
