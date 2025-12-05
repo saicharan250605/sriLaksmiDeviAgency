@@ -1,0 +1,28 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="Add_importPlace_form_container" style="margin-top: 35px;">
+        <form action="/addimportPlace" method="post" id="Add_importPlace_form">
+            <label for="importPlaceName">City name</label>
+            <span style="color:red;display:none;font-size: 14px;">Importing place and company already exists</span>
+            <input type="text" placeholder="Enter city from where you are importing" id="importPlaceName" name="importPlace[city]" required>
+
+            <label for="company_name">Company name</label>
+            <input type="text" placeholder="Enter Company Name" name="importPlace[companyName]" id="company_name" required>
+            
+            <label for="importPlace_gst">GST Number</label>
+            <input type="text" id="importPlace_gst" name="importPlace[gstNumber]" placeholder="Enter GST number of the company" required>
+
+            <button id="addImportPlace_btn">Add</button>
+        </form>
+    </div>
+    <script>
+        const allImportPlaces = <%-JSON.stringify(allImportPlaces)%>;
+        const Add_importPlace_form = document.querySelector("#Add_importPlace_form");
+        Add_importPlace_form.addEventListener("submit",(event)=>{
+            if(allImportPlaces.some(obj => (obj.city == Add_importPlace_form.children[2].value.toUpperCase() && obj.companyName == Add_importPlace_form.children[4].value.toUpperCase()))){
+                event.preventDefault();
+                Add_importPlace_form.children[1].style.display="block";
+            }
+        });
+    </script>
+</body>

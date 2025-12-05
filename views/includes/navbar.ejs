@@ -6,9 +6,11 @@
         <a href="/" id="allProducts"><div>All Product types</div></a>
         <%if(reqUser != undefined){%> <a href="/addProduct" id="addProduct"><div>Add Product type</div></a> <%}%>
         <%if(reqUser != undefined){%> <a href="/addDealer" id="addDealer"><div>Add Dealer</div></a> <%}%>
+        <%if(reqUser != undefined){%> <a href="/addimportPlace" id="addImportPlace"><div>Add Import Place</div></a> <%}%>
         <a href="/allDealersInvoicelist" id="allDealersInvoiceList"><div>All Dealers Invoice Lists</div></a>
+        <a href="/indInvoices_ImportPlace" id="invoices_of_ImportPlace"><div>All Companies Import Invoices</div></a>
     </div>
-    <div id="loginBtnContainer">    
+    <div id="loginBtnContainer">
         <%if(reqUser == undefined){%>
             <div id="login_btn"><a href="/loginPageRender">Login</a></div>
             <div id="sign_up_btn"><a href="/signupPageRender">Sign up</a></div>

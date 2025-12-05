@@ -1,11 +1,11 @@
 *{
     font-family: "Noto Sans", sans-serif;
 }
-#Add_product_type_form_container,#Add_dealer_form_container{
+#Add_product_type_form_container,#Add_dealer_form_container,#Add_importPlace_form_container{
     display: flex;
     justify-content: center;
 }
-#Add_product_type_form,#Add_dealer_form{
+#Add_product_type_form,#Add_dealer_form,#Add_importPlace_form{
     display: flex;
     flex-direction: column;
     width:30%;
@@ -45,7 +45,7 @@ input{
     background-color: lime;
     color:black;
 }
-#addDealer_btn{
+#addDealer_btn,#addImportPlace_btn{
     width:100px;
     height:35px;
     font-size: 17px;
@@ -56,7 +56,7 @@ input{
     background-color: royalblue;
     color:white;
 }
-#addProduct_btn:hover,#addDealer_btn:hover{
+#addProduct_btn:hover,#addDealer_btn:hover,#addImportPlace_btn:hover{
     scale:1.03;
 }
 

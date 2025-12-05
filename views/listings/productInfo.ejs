@@ -62,7 +62,13 @@
             <legend>Import Invoice</legend>
             <i class="fa-solid fa-xmark xmark_import"></i>
             <label for="importing_date">Imported Date</label><input type="date" id="importing_date" name="importing[date]" required>
-            <label for="importing_place">Imported From</label><input type="text" id="importing_place" name="importing[place]" placeholder="Enter place of import" required>
+            <label for="importing_place">Imported From</label>
+            <select id="importing_place" name="importing[place]" style="border: 1px solid gray;margin-bottom:13px;height:30px;" required>
+                <option value="" hidden disable>Select company you are importing from</option>
+                <% for(let indCompany of allImportPlacesList){ %>
+                    <option value="<%=indCompany.companyName%>_<%=indCompany.city%>"><%=indCompany.companyName%> ( <span><%=indCompany.city%></span> )</option>
+                <% } %>                
+            </select>
             <label for="importing_invoice">Invoice Number</label><input type="text" id="importing_invoice" name="importing[invoice]" placeholder="Enter invoice number" required>
             <button type="button" id="add_subproduct_select_btn_import">Add Item +</button>
             <span style="color:red;font-size: 14px;display:none;">Please select an item first</span>

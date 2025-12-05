@@ -31,6 +31,7 @@ const exportClass = require("./models/exportClass.js");
 const sellClass = require("./models/sell.js");
 const dealerClass = require("./models/dealerClass.js");
 const userClass = require("./models/userModel.js");
+const importPlaceClass = require("./models/ImportingPlace.js");
 
 const port = 8000;
 app.listen(port,"0.0.0.0",()=>{
@@ -180,13 +181,14 @@ app.get("/ProductInfo/:id",asyncwrap(async(req,res)=>{
             path:"items"
         }
     }).lean();
+    let allImportPlacesList = await importPlaceClass.find();
     let result2 = result1.subProducts;
     let result3= {};
     for(let ind_sp of result1.subProducts ){
         result3[ind_sp.name] = ind_sp.items;
     }
     res.locals.allsubProducts_of_allProducts = await subProductTypeClass.find();
-    res.render("listings/productInfo.ejs",{result1,result2,result3});
+    res.render("listings/productInfo.ejs",{result1,result2,result3,allImportPlacesList});
 }));
 app.post("/addSubproduct/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     let {id} = req.params;
@@ -311,10 +313,27 @@ app.delete("/delete/dealer/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     res.redirect("/allDealersInvoicelist");
 }));
 
+//////////////////////////////////// ADDING IMPORT PLACE OR DEALER ////////////////////////////
+app.get("/addimportPlace",asyncwrap(async(req,res)=>{
+    let allImportPlaces = await importPlaceClass.find();
+    res.render("listings/addImportPlaceForm.ejs",{allImportPlaces});
+}));
+app.post("/addimportPlace",async(req,res)=>{
+    let newImportPlace = new importPlaceClass(req.body.importPlace);
+    await newImportPlace.save();
+    req.flash("success","Import place added successfully");
+    res.redirect("/allLists");
+});
+//////////////////////////////////// DISPLAYING ALL IMPORTS OF INDIVIDUAL PLACES or DEALERS ///////////////////////////////
+app.get("/indInvoices_ImportPlace",asyncwrap(async(req,res)=>{
+    let allImportPlaces = await importPlaceClass.find();
+    res.render("listings/allPlacesImports.ejs",{allImportPlaces});
+}));
 //////////////////////////////////// ADDING IMPORT /////////////////////////////////////////
 app.post("/add/imports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     let {id} = req.params;
     let selectedProduct = await productTypeClass.findById(id);
+    let selectedCompany = await importPlaceClass.findOne({city:req.body.importing.place.split("_")[1].trim(),companyName:req.body.importing.place.split("_")[0].trim()});
     let newImport = new importClass(req.body.importing);
     newImport.parentProduct = id;
     let selectedSubProduct,selectedItem;
@@ -337,6 +356,8 @@ app.post("/add/imports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     await newImport.save();
     selectedProduct.import.push(newImport);
     await selectedProduct.save();
+    selectedCompany.invoices.push(newImport);
+    await selectedCompany.save();
     req.flash("success","import invoice added successfully");
     res.redirect(`/ProductInfo/${id}`);
 }));
@@ -361,6 +382,7 @@ app.delete("/delete/import/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
         }
     }
     if(shallProceed){
+        await importPlaceClass.findOneAndUpdate({city:curr_import_invoice.place.split("_")[1].trim(),companyName:curr_import_invoice.place.split("_")[0].trim()},{$pull:{invoices:id}});
         currProduct = await productTypeClass.findById(curr_import_invoice.parentProduct);
         for(let j of curr_import_invoice.productsBought){
             let currSubPro = await subProductTypeClass.findById(j.parentSubProduct);
@@ -377,7 +399,7 @@ app.delete("/delete/import/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
         await currProduct.save();
         await productTypeClass.findByIdAndUpdate(curr_import_invoice.parentProduct,{$pull:{import:id}});
         await importClass.findByIdAndDelete(id);
-        req.flash("success","export invoice deleted successfully");
+        req.flash("success","import invoice deleted successfully");
         res.redirect(req.session.originalUrl);
     }else{
         req.flash("error","This import cannot be deleted");

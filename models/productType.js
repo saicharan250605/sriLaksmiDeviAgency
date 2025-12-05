@@ -17,15 +17,15 @@ const productTypeSchema = new mongoose.Schema({
     }],
     import:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"importClass",
+        ref:"ImportSchema",
     }],
     export:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"exportClass",
+        ref:"Export",
     }], 
     sell:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"sellClass",
+        ref:"Sell",
     }],
     total:{
         type:Number

@@ -23,11 +23,11 @@ const exportSchema = new mongoose.Schema({
         },
         parentSubProduct:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:"subProductTypeClass",
+            ref:"SubProduct",
         },
         parentItem:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:"ItemClass",
+            ref:"Item",
         },
     }],
     cgst:{
@@ -47,7 +47,7 @@ const exportSchema = new mongoose.Schema({
     },
     parentProduct:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"productTypeClass",
+        ref:"Product",
     }
 });
 
