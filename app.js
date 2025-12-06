@@ -119,6 +119,13 @@ app.get("/",(req,res)=>{
 });
 app.get("/allLists",asyncwrap(async(req,res)=>{
     let result = await productTypeClass.find();
+    // let all_vigImports = await importClass.find({place:"ARUNA AGENCIES_VIJAYAWADA"});
+    // let vigPlace = await importPlaceClass.findOne({companyName: "ARUNA AGENCIES"});
+    // vigPlace.invoices.push(...all_vigImports);
+    // await vigPlace.save();
+    // console.log(all_vigImports);
+    // console.log("////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+    // console.log(vigPlace);
     res.render("listings/homepage.ejs",{result});
 }));
 

@@ -32,7 +32,7 @@
                     <% for(i of importsList){ %>
                         <tr class="all_invoices_rows" style="position:relative;" class="importRows">
                             <td class="all_invoices_data_rows"><%= new Date(i.date).toLocaleDateString()%></td>
-                            <td class="all_invoices_data_rows"><%= i.place %></td>
+                            <td class="all_invoices_data_rows"><%= i.place.split("_")[0].trim()%> (<%= i.place.split("_")[1].trim()%> )</td>
                             <td class="all_invoices_data_rows"><%= i.invoice %></td>
                             <td class="all_invoices_data_rows"><%= i.totalSpendable.toFixed(3) %></td>
                             <td class="all_invoices_data_rows"><%= i.paid.toFixed(3) %></td>
