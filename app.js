@@ -119,13 +119,10 @@ app.get("/",(req,res)=>{
 });
 app.get("/allLists",asyncwrap(async(req,res)=>{
     let result = await productTypeClass.find();
-    // let all_vigImports = await importClass.find({place:"ARUNA AGENCIES_VIJAYAWADA"});
-    // let vigPlace = await importPlaceClass.findOne({companyName: "ARUNA AGENCIES"});
-    // vigPlace.invoices.push(...all_vigImports);
-    // await vigPlace.save();
-    // console.log(all_vigImports);
-    // console.log("////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-    // console.log(vigPlace);
+    // let allexports = await exportClass.find();
+    // let currDealer = await dealerClass.findOne({name:allexports[1].dealer})
+    // allexports[1].dealer = currDealer.shopName + "_" + currDealer.name;
+    // await allexports[1].save();
     res.render("listings/homepage.ejs",{result});
 }));
 
@@ -438,7 +435,7 @@ app.post("/add/exports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
         selectedProduct.available = Number(selectedProduct.available)-Number(req.body.exporting.productSold[i].number);
     }
     await newExport.save();
-    let currDealer = await dealerClass.findOne({name:req.body.exporting.dealer});
+    let currDealer = await dealerClass.findOne({name:req.body.exporting.dealer.split("_")[1].trim(), shopName:req.body.exporting.dealer.split("_")[1].trim()});
     currDealer.invoices.push(newExport);
     await currDealer.save();
     selectedProduct.export.push(newExport);
@@ -614,9 +611,9 @@ app.get("/logout",(req,res)=>{
 });
 
 //////////////////////////////////////////// ERROR HANDLING FUNCTIONS ///////////////////////////////////////////////
-app.use((req,res,next)=>{
-    throw new Error(401,"401 Page Not Found");
-});
-app.use((err,req,res,next)=>{
-    res.render("listings/errorPage.ejs",{err});
-});
+// app.use((req,res,next)=>{
+//     throw new Error(401,"401 Page Not Found");
+// });
+// app.use((err,req,res,next)=>{
+//     res.render("listings/errorPage.ejs",{err});
+// });

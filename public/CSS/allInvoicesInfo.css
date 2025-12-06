@@ -54,6 +54,7 @@ th{
     border-collapse: collapse;
     text-align: center;
     cursor: pointer;
+    font-size: 14px;
 }
 .all_invoices_data_rows > div{
     height:auto;

@@ -101,7 +101,7 @@
             <select name="exporting[dealer]" id="dealer_export" required>
                 <option value="" hidden disable>Select a dealer name</option>
                 <% for(let indDealer of allDealers){ %>
-                    <option value="<%=indDealer.name%>"><%=indDealer.name%></option>
+                    <option value="<%=indDealer.shopName%>_<%=indDealer.name%>"><%=indDealer.shopName%> ( <%=indDealer.name%> )</option>
                 <% } %>
             </select>
             <label for="export_invoice_number">Invoice Number</label>

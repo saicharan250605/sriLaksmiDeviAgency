@@ -8,9 +8,6 @@ const dealerSchema = new mongoose.Schema({
         type:String,
         uppercase:true,
     },
-    // mobile:{
-    //     type:Number,
-    // },
     city:{
         type:String,
         uppercase:true,
