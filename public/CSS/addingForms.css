@@ -63,7 +63,7 @@ input{
 
 /********************************** SUB PRODUCTS ADD FORM *********************************/
 #subProductAddForm{
-    position: absolute;
+    position: fixed;
     left:50%;
     top:50%;
     height:190px;
@@ -99,7 +99,7 @@ input{
 
 /************************************** ITEMS ADD FORM ***********************************/
 #itemAddForm{
-    position: absolute;
+    position: fixed;
     left:50%;
     top:50%;
     height:190px;
@@ -135,11 +135,11 @@ input{
 
 /******************************** IMPORTS ADD FORM ********************************/
 #importInvoice_form{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:500px;
-    height:560px;
+    height:510px;
     transform: translate(-50%,-50%);
     display:none;
 }
@@ -198,11 +198,11 @@ input{
 
 /******************************** EXPORTS ADD FORM ********************************/
 #exportInvoice_form{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:500px;
-    height:580px;
+    height:530px;
     transform: translate(-50%,-50%);
     display:none;
 }
@@ -267,7 +267,7 @@ input{
 
 /********************************* SALES ADD FORM ********************************/
 #indSalesInvoice_form{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:500px;
@@ -326,7 +326,7 @@ input{
 }
 /******************************** ADD INVOICE ***********************************/
 #invoiceAddDiv{
-    position: absolute;
+    position: fixed;
     left:50%;
     top:50%;
     height:220px;
@@ -361,7 +361,7 @@ input{
 
 /* ///////////////////////////////////////// */
 #deleteConfirmation_div{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -376,7 +376,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_subproduct{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -391,7 +391,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_item{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -406,7 +406,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_import{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -421,7 +421,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_export{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -436,7 +436,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_indSales{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -451,7 +451,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_dealer{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;
@@ -466,7 +466,7 @@ input{
     display:none;
 }
 #deleteConfirmation_div_dealer_invoice{
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     width:350px;

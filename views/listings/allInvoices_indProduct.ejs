@@ -24,8 +24,6 @@
                         <th>Imported From</th>
                         <th>Invoice Number</th>
                         <th>Total Amount</th>
-                        <th>Paid</th>
-                        <th>Balance</th>
                         <th>Download Invoice</th>
                         <%if(reqUser !== undefined){%> <th>Delete</th> <%}%>
                     </tr>
@@ -35,8 +33,6 @@
                             <td class="all_invoices_data_rows" ><%= i.place.split("_")[0].trim()%> (<%= i.place.split("_")[1].trim()%> )</td>
                             <td class="all_invoices_data_rows"><%= i.invoice %></td>
                             <td class="all_invoices_data_rows"><%= i.totalSpendable.toFixed(3) %></td>
-                            <td class="all_invoices_data_rows"><%= i.paid.toFixed(3) %></td>
-                            <td class="all_invoices_data_rows"><%= i.balance.toFixed(3) %></td>
                             <td class="all_invoices_data_rows" style="font-size: 25px;cursor:pointer;color:brown;">
                                 <i class="fa-solid fa-download"></i>
                                 <div>
@@ -95,8 +91,6 @@
                         <th>Exported To</th>
                         <th>Invoice Number</th>
                         <th>Total Amount</th>
-                        <th>Received</th>
-                        <th>Balance</th>
                         <th>Download Invoice</th>
                         <%if(reqUser !== undefined){%><th>Delete</th><%}%>
                     </tr>
@@ -106,8 +100,6 @@
                         <td class="all_invoices_data_rows" style="text-transform: capitalize;"><%= i.dealer.split("_")[0].trim().toLowerCase()%> (<%=i.dealer.split("_")[1].trim().toLowerCase()%>)</td>
                         <td class="all_invoices_data_rows"><%= i.invoice %></td>
                         <td class="all_invoices_data_rows"><%= i.totalReceivable.toFixed(3) %></td>
-                        <td class="all_invoices_data_rows"><%= i.received.toFixed(3) %></td>
-                        <td class="all_invoices_data_rows"><%= i.balance.toFixed(3) %></td>
                         <td class="all_invoices_data_rows" style="font-size: 25px;cursor:pointer;color:brown">
                             <i class="fa-solid fa-download"></i>
                             <div>

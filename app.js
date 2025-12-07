@@ -77,17 +77,15 @@ passport.deserializeUser(userClass.deserializeUser());
 
 /////////////////////////////////////////////////// BASIC APP.USE //////////////////////////////////////////////////////
 app.use("/",(req,res,next)=>{
-    if(req.method !== "DELETE")
+    if(req.method !== "DELETE"){
         req.session.originalUrl = req.originalUrl;
-    res.locals.success = req.flash("success"); 
-    res.locals.error = req.flash("error");
+    }
+    if(req.method === "GET"){
+        res.locals.success = req.flash("success"); 
+        res.locals.error = req.flash("error");
+    }
     res.locals.reqUser = req.user;// used to display signup login / logout && listingOwner
     return next();
-});
-app.use("/ProductInfo",async(req,res,next)=>{
-    let allDealers = await dealerClass.find();
-    res.locals.allDealers = allDealers;
-    next();
 });
 app.use("/",(req, res, next) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0'); ///////////////// Important
@@ -119,16 +117,12 @@ app.get("/",(req,res)=>{
 });
 app.get("/allLists",asyncwrap(async(req,res)=>{
     let result = await productTypeClass.find();
-    // let allexports = await exportClass.find();
-    // let currDealer = await dealerClass.findOne({name:allexports[1].dealer})
-    // allexports[1].dealer = currDealer.shopName + "_" + currDealer.name;
-    // await allexports[1].save();
     res.render("listings/homepage.ejs",{result});
 }));
 
 /////////////////////////////////// ADDING PRODUCT //////////////////////////////////
 app.get("/addProduct",isUserLoggedin,asyncwrap(async(req,res)=>{
-    const allProducts = await productTypeClass.find();
+    const allProducts = await productTypeClass.find().select("name");
     res.render("listings/addProductForm.ejs",{allProducts});
 }));
 app.post("/addProduct",isUserLoggedin,upload.single("productImage"),asyncwrap(async(req,res)=>{
@@ -179,20 +173,23 @@ app.delete("/delete/product/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
 ///////////////////////////////// ADDING SUB PRODUCT ///////////////////////////////
 app.get("/ProductInfo/:id",asyncwrap(async(req,res)=>{
     let {id} = req.params;
-    let result1 = await productTypeClass.findById(id).populate({
-        path:"subProducts",
-        populate:{
-            path:"items"
-        }
-    }).lean();
-    let allImportPlacesList = await importPlaceClass.find();
+    const[allDealers, allImportPlacesList, allsubProducts_of_allProducts, result1] = await Promise.all([
+        dealerClass.find().select("name shopName"),
+        importPlaceClass.find().select("companyName city"),
+        subProductTypeClass.find().select("name"),
+        productTypeClass.findById(id).populate({
+            path:"subProducts",
+            populate:{
+                path:"items"
+            }
+        }).lean()
+    ]);
     let result2 = result1.subProducts;
     let result3= {};
     for(let ind_sp of result1.subProducts ){
         result3[ind_sp.name] = ind_sp.items;
     }
-    res.locals.allsubProducts_of_allProducts = await subProductTypeClass.find();
-    res.render("listings/productInfo.ejs",{result1,result2,result3,allImportPlacesList});
+    res.render("listings/productInfo.ejs",{result1, result2, result3, allDealers, allsubProducts_of_allProducts, allImportPlacesList});
 }));
 app.post("/addSubproduct/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     let {id} = req.params;
@@ -233,10 +230,13 @@ app.delete("/delete/subProduct/:product_id/:subproduct_id",isUserLoggedin,asyncw
 ///////////////////////////////////////// ADDING ITEMS /////////////////////////////////////
 app.get("/subProduct/info/:id1/:id2",asyncwrap(async(req,res)=>{
     let {id1,id2} = req.params;
-    let result1 = await productTypeClass.findById(id1); 
-    let result2 = await subProductTypeClass.findById(id2);
-    let [result3] = await Promise.all([itemClass.find({_id:{$in: result2.items}})]);
-    res.locals.allItems_of_allProducts = await itemClass.find();
+    const result2 = await subProductTypeClass.findById(id2);
+    const [result1, result3, allItems_of_allProducts] = await Promise.all([
+        productTypeClass.findById(id1),
+        itemClass.find({_id:{$in: result2.items}}),
+        itemClass.find().select("name")
+    ]);
+    res.locals.allItems_of_allProducts = allItems_of_allProducts;
     res.render("listings/subProductInfo.ejs",{result1,result2,result3});
 }));
 app.post("/addItem/:id1/:id2",isUserLoggedin,asyncwrap(async(req,res)=>{
@@ -294,11 +294,15 @@ app.delete("/delete/dealer/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     const {id} = req.params;
     const currDealer = await dealerClass.findById(id);
     for(let i of currDealer.invoices){
-        let currExport_Invoice = await exportClass.findById(i);
-        let currProduct = await productTypeClass.findById(currExport_Invoice.parentProduct);
+        let [currExport_Invoice, currProduct] = await Promise.all([
+            exportClass.findById(i),
+            productTypeClass.findById(currExport_Invoice.parentProduct)
+        ]);
         for(let j of currExport_Invoice.productSold){
-            let currSubPro = await subProductTypeClass.findById(j.parentSubProduct);
-            let currItem = await itemClass.findById(j.parentItem);
+            let [currSubPro, currItem] = await Promise.all([
+                subProductTypeClass.findById(j.parentSubProduct),
+                itemClass.findById(j.parentItem)
+            ]);
             currItem.sold -= j.number;
             currItem.available += j.number;
             currSubPro.sold -= j.number;
@@ -319,7 +323,7 @@ app.delete("/delete/dealer/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
 
 //////////////////////////////////// ADDING IMPORT PLACE OR DEALER ////////////////////////////
 app.get("/addimportPlace",asyncwrap(async(req,res)=>{
-    let allImportPlaces = await importPlaceClass.find();
+    let allImportPlaces = await importPlaceClass.find().select("city companyName");
     res.render("listings/addImportPlaceForm.ejs",{allImportPlaces});
 }));
 app.post("/addimportPlace",async(req,res)=>{
@@ -340,19 +344,21 @@ app.post("/add/imports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     let selectedCompany = await importPlaceClass.findOne({city:req.body.importing.place.split("_")[1].trim(),companyName:req.body.importing.place.split("_")[0].trim()});
     let newImport = new importClass(req.body.importing);
     newImport.parentProduct = id;
-    let selectedSubProduct,selectedItem;
     for(i=0; i<req.body.allIds.length; i++){
         selectedProduct.total = Number(selectedProduct.total)+Number(req.body.importing.productsBought[i].number);
         selectedProduct.available = Number(selectedProduct.available)+Number(req.body.importing.productsBought[i].number);
         
+        let [selectedSubProduct, selectedItem] = await Promise.all([
+            subProductTypeClass.findById(req.body.allIds[i]),
+            itemClass.findById(req.body.allItemIds[i])
+        ]);
+
         newImport.productsBought[i].parentSubProduct = req.body.allIds[i];
-        selectedSubProduct = await subProductTypeClass.findById(req.body.allIds[i]);
         selectedSubProduct.total = Number(req.body.importing.productsBought[i].number) + Number(selectedSubProduct.total) ;
         selectedSubProduct.available=Number(req.body.importing.productsBought[i].number) + Number(selectedSubProduct.available) ;
         await selectedSubProduct.save();
 
         newImport.productsBought[i].parentItem = req.body.allItemIds[i];
-        selectedItem = await itemClass.findById(req.body.allItemIds[i]); 
         selectedItem.total=Number(req.body.importing.productsBought[i].number)+Number(selectedItem.total);
         selectedItem.available=Number(req.body.importing.productsBought[i].number)+Number(selectedItem.available);
         await selectedItem.save();
@@ -369,12 +375,14 @@ app.post("/add/imports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
 //////////////////////////////////// DELETE IMPORT /////////////////////////////////////////
 app.delete("/delete/import/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     const {id} = req.params;
-    const curr_import_invoice = await importClass.findById(id);
+    let curr_import_invoice = await importClass.findById(id);
     let currProduct = await productTypeClass.findById(curr_import_invoice.parentProduct);
     let shallProceed = true;
     for(let j of curr_import_invoice.productsBought){
-        let currSubPro = await subProductTypeClass.findById(j.parentSubProduct);
-        let currItem = await itemClass.findById(j.parentItem);
+        let [currSubPro, currItem] = await Promise.all([
+            subProductTypeClass.findById(j.parentSubProduct),
+            itemClass.findById(j.parentItem)
+        ]);
         currProduct.total -= j.number;
         currProduct.available -= j.number;
         currSubPro.total -= j.number;
@@ -389,8 +397,10 @@ app.delete("/delete/import/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
         await importPlaceClass.findOneAndUpdate({city:curr_import_invoice.place.split("_")[1].trim(),companyName:curr_import_invoice.place.split("_")[0].trim()},{$pull:{invoices:id}});
         currProduct = await productTypeClass.findById(curr_import_invoice.parentProduct);
         for(let j of curr_import_invoice.productsBought){
-            let currSubPro = await subProductTypeClass.findById(j.parentSubProduct);
-            let currItem = await itemClass.findById(j.parentItem);
+            let [currSubPro, currItem] = await Promise.all([
+                subProductTypeClass.findById(j.parentSubProduct),
+                itemClass.findById(j.parentItem)
+            ]);
             currProduct.total -= j.number;
             currProduct.available -= j.number;
             currSubPro.total -= j.number;
@@ -413,20 +423,21 @@ app.delete("/delete/import/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
 
 //////////////////////////////////// ADDING EXPORT /////////////////////////////////////////
 app.post("/add/exports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
-    let selectedSubProduct,selectedItem;
     const {id} = req.params;
     let selectedProduct = await productTypeClass.findById(id);
     let newExport = new exportClass(req.body.exporting);
     newExport.parentProduct = id;
     for(i=0; i<req.body.allIds.length; i++){
         newExport.productSold[i].parentItem = req.body.allItemIds[i];
-        selectedItem = await itemClass.findById(req.body.allItemIds[i]); 
+        let [selectedItem, selectedSubProduct] = await Promise.all([
+            itemClass.findById(req.body.allItemIds[i]),
+            subProductTypeClass.findById(req.body.allIds[i])
+        ]);
         selectedItem.sold = Number(req.body.exporting.productSold[i].number)+Number(selectedItem.sold);
         selectedItem.available = Number(selectedItem.available) - Number(req.body.exporting.productSold[i].number);
         await selectedItem.save();
 
         newExport.productSold[i].parentSubProduct = req.body.allIds[i];
-        selectedSubProduct = await subProductTypeClass.findById(req.body.allIds[i]);
         selectedSubProduct.sold = Number(req.body.exporting.productSold[i].number) + Number(selectedSubProduct.sold);
         selectedSubProduct.available = Number(selectedSubProduct.available) - Number(req.body.exporting.productSold[i].number);
         await selectedSubProduct.save();
@@ -435,7 +446,8 @@ app.post("/add/exports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
         selectedProduct.available = Number(selectedProduct.available)-Number(req.body.exporting.productSold[i].number);
     }
     await newExport.save();
-    let currDealer = await dealerClass.findOne({name:req.body.exporting.dealer.split("_")[1].trim(), shopName:req.body.exporting.dealer.split("_")[1].trim()});
+    let currDealer = await dealerClass.findOne({name:req.body.exporting.dealer.split("_")[1].trim(), shopName:req.body.exporting.dealer.split("_")[0].trim()});
+    // console.log(currDealer);
     currDealer.invoices.push(newExport);
     await currDealer.save();
     selectedProduct.export.push(newExport);
@@ -450,8 +462,10 @@ app.delete("/delete/export/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     const curr_export_invoice = await exportClass.findById(id);
     const currProduct = await productTypeClass.findById(curr_export_invoice.parentProduct);
     for(let j of curr_export_invoice.productSold){
-        let currSubPro = await subProductTypeClass.findById(j.parentSubProduct);
-        let currItem = await itemClass.findById(j.parentItem);
+        let [currSubPro, currItem] = await Promise.all([
+            subProductTypeClass.findById(j.parentSubProduct),
+            itemClass.findById(j.parentItem)
+        ]);
         currItem.sold -= j.number;
         currItem.available += j.number;
         currSubPro.sold -= j.number;
@@ -474,16 +488,18 @@ app.post("/add/indSales/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     const selectedProduct = await productTypeClass.findById(id);
     let newIndSale = new sellClass(req.body.indSales);
     newIndSale.parentProduct = id;
-    let selectedSubProduct,selectedItem;
     for(i=0; i<req.body.allIds.length; i++){
         newIndSale.productSold[i].parentItem = req.body.allItemIds[i];
-        selectedItem = await itemClass.findById(req.body.allItemIds[i]);
+        let[selectedItem, selectedSubProduct] = await Promise.all([
+            itemClass.findById(req.body.allItemIds[i]),
+            subProductTypeClass.findById(req.body.allIds[i])
+        ]);
+
         selectedItem.sold = Number(req.body.indSales.productSold[i].number)+Number(selectedItem.sold);
         selectedItem.available = Number(selectedItem.available) - Number(req.body.indSales.productSold[i].number);
         await selectedItem.save();
 
         newIndSale.productSold[i].parentSubProduct = req.body.allIds[i];
-        selectedSubProduct = await subProductTypeClass.findById(req.body.allIds[i]);
         selectedSubProduct.sold = Number(req.body.indSales.productSold[i].number) + Number(selectedSubProduct.sold);
         selectedSubProduct.available = Number(selectedSubProduct.available) - Number(req.body.indSales.productSold[i].number);
         await selectedSubProduct.save();
@@ -504,8 +520,10 @@ app.delete("/delete/indSales/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     const curr_indSales_invoice = await sellClass.findById(id);
     const currProduct = await productTypeClass.findById(curr_indSales_invoice.parentProduct);
     for(let j of curr_indSales_invoice.productSold){
-        let currSubPro = await subProductTypeClass.findById(j.parentSubProduct);
-        let currItem = await itemClass.findById(j.parentItem);
+        let [currSubPro, currItem] = await Promise.all([
+            subProductTypeClass.findById(j.parentSubProduct),
+            itemClass.findById(j.parentItem)
+        ]);
         currItem.sold -= j.number;
         currItem.available += j.number;
         currSubPro.sold -= j.number;

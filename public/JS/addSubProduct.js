@@ -144,7 +144,7 @@ function enablingSelectingItems(event){
 let importInvoice_form = document.querySelector("#importInvoice_form");
 let add_subproduct_select_btn_import = document.querySelector("#add_subproduct_select_btn_import");
 let container_of_dynamicAddedEle_import = document.querySelector("#selectingProduct_import");
-let balance_importamount = document.querySelector("#balance_importamount");
+let importing_totalSpendable = document.querySelector("#importing_totalSpendable");
 const cgst_import = document.querySelector("#cgst_import");
 const sgst_import = document.querySelector("#sgst_import");
 let xmark_import = document.querySelector(".xmark_import");
@@ -159,7 +159,7 @@ cgst_import.addEventListener("input",changeAmount2);
 sgst_import.addEventListener("input",changeAmount2);
 
 function handler10(){
-    importInvoice_form.style.setProperty("height","600px");
+    importInvoice_form.style.setProperty("height","550px");
     let minidiv = document.createElement("div");
     minidiv.setAttribute("class","minidiv");
     adding_selectElements_function(minidiv, "import");
@@ -246,11 +246,11 @@ function handler12(){
 function changeAmount2(){
     let itemNumbers = document.querySelectorAll(".allitems_theirCount2");
     let itemPrices = document.querySelectorAll(".allitems_theirPrice2");
-    balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value = 0;
+    importing_totalSpendable.value = 0;
     for(i=0; i<itemNumbers.length; i++){
-        balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value = Number(balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value)+(itemNumbers[i].value * itemPrices[i].value);
+        importing_totalSpendable.value = Number(importing_totalSpendable.value)+(itemNumbers[i].value * itemPrices[i].value);
     }
-    balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value = (Number(balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value)+(cgst_import.value/100)*Number(balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value)+(sgst_import.value/100)*Number(balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value)).toFixed(3);
+    importing_totalSpendable.value = (Number(importing_totalSpendable.value)+(cgst_import.value/100)*Number(importing_totalSpendable.value)+(sgst_import.value/100)*Number(importing_totalSpendable.value)).toFixed(3);
 }
 function importFormSubmit(event){
     let eachSubproducts = document.querySelectorAll(".subproductId_inInput");
@@ -268,7 +268,6 @@ function importFormSubmit(event){
         eachSubproducts[i].value = eachSubproducts[i].parentElement.children[0].selectedOptions[0].id;
         eachItem[i].value = eachItem[i].parentElement.children[1].selectedOptions[0].id;
     }
-    balance_importamount.value = ((balance_importamount.previousElementSibling.previousElementSibling.previousElementSibling.value)-(balance_importamount.previousElementSibling.value)).toFixed(3);
 }
 
 //***************************************************** EXPORT FORM CODE ***************************************************//
@@ -276,7 +275,7 @@ function importFormSubmit(event){
 const exportInvoice_form = document.querySelector("#exportInvoice_form");
 const add_subproduct_select_btn_export = document.querySelector("#add_subproduct_select_btn");
 const container_of_dynamicAddedEle_export = document.querySelector("#selectingProduct_export");
-const balance_exportamount = document.querySelector("#balance_exportamount");
+const totalReceivable_exportamount = document.querySelector("#totalReceivable_exportamount");
 const xmark_export = document.querySelector(".xmark_export");
 const cgst_export = document.querySelector("#cgst_export");
 const sgst_export = document.querySelector("#sgst_export");
@@ -291,7 +290,7 @@ cgst_export.addEventListener("input",changeAmount1);
 sgst_export.addEventListener("input",changeAmount1);
 
 function handler9(){
-    exportInvoice_form.style.setProperty("height","600px");
+    exportInvoice_form.style.setProperty("height","550px");
     let minidiv = document.createElement("div");
     minidiv.setAttribute("class","minidiv");
     error_displayMessage_export(minidiv);
@@ -371,11 +370,11 @@ function handler11(){
 function changeAmount1(){
     let itemNumbers = document.querySelectorAll(".allitems_theirCount");
     let itemPrices = document.querySelectorAll(".allitems_theirPrice");
-    balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value = 0;
+    totalReceivable_exportamount.value = 0;
     for(i=0; i<itemNumbers.length; i++){
-        balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value = Number(balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value)+(itemNumbers[i].value * itemPrices[i].value);
+        totalReceivable_exportamount.value = Number(totalReceivable_exportamount.value)+(itemNumbers[i].value * itemPrices[i].value);
     }
-    balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value = (Number(balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value) + (cgst_export.value/100)*Number(balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value) + (sgst_export.value/100)*Number(balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value)).toFixed(3);
+    totalReceivable_exportamount.value = (Number(totalReceivable_exportamount.value) + (cgst_export.value/100)*Number(totalReceivable_exportamount.value) + (sgst_export.value/100)*Number(totalReceivable_exportamount.value)).toFixed(3);
 }
 function exportFormSubmit(event){
     let eachSubproducts = document.querySelectorAll(".subproductId_inInput_export");
@@ -404,7 +403,6 @@ function exportFormSubmit(event){
             eachSubproducts[i].value = eachSubproducts[i].parentElement.children[1].selectedOptions[0].id;
             eachItem[i].value = eachItem[i].parentElement.children[2].selectedOptions[0].id;
         }
-        balance_exportamount.value = ((balance_exportamount.previousElementSibling.previousElementSibling.previousElementSibling.value)-(balance_exportamount.previousElementSibling.value)).toFixed(3);
     }
 }
 

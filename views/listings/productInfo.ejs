@@ -85,9 +85,9 @@
             </div>
             <label for="importing_totalSpendable">Total Amount</label>
             <input type="number" step="any" id="importing_totalSpendable" name="importing[totalSpendable]" placeholder="Enter total amount to be paid" required>
-            <label for="importing_paid">Amount paid</label>
-            <input type="number" step="any" id="importing_paid" name="importing[paid]" placeholder="Enter amount paid" required>
-            <input type="number" step="any" id="balance_importamount" name="importing[balance]" style="display: none;">
+            <!-- <label for="importing_paid">Amount paid</label>
+            <input type="number" step="any" id="importing_paid" name="importing[paid]" placeholder="Enter amount paid" required> -->
+            <!-- <input type="number" step="any" id="balance_importamount" name="importing[balance]" style="display: none;"> -->
             <button type="submit" id="import_form_submit_button">create invoice</button>
         </fieldset>
     </form>
@@ -100,7 +100,7 @@
             <label for="dealer_export">Dealer Name</label>
             <select name="exporting[dealer]" id="dealer_export" required>
                 <option value="" hidden disable>Select a dealer name</option>
-                <% for(let indDealer of allDealers){ %>
+                <% for(let indDealer of allDealers){ %> 
                     <option value="<%=indDealer.shopName%>_<%=indDealer.name%>"><%=indDealer.shopName%> ( <%=indDealer.name%> )</option>
                 <% } %>
             </select>
@@ -121,9 +121,9 @@
             </div>
             <label for="totalReceivable_exportamount">Receivable Amount</label>
             <input type="Number" step="any" id="totalReceivable_exportamount" name="exporting[totalReceivable]" required placeholder="Enter total amount to be received">
-            <label for="">Received Amount</label>
-            <input type="Number" step="any" id="received_exportamount" name="exporting[received]" required placeholder="Enter total amount received">
-            <input type="Number" step="any" id="balance_exportamount" name="exporting[balance]" style="display: none;">
+            <!-- <label for="">Received Amount</label> -->
+            <!-- <input type="Number" step="any" id="received_exportamount" name="exporting[received]" required placeholder="Enter total amount received"> -->
+            <!-- <input type="Number" step="any" id="balance_exportamount" name="exporting[balance]" style="display: none;"> -->
             <button type="submit" id="export_form_submit_btn">create invoice</button>
         </fieldset>
     </form>

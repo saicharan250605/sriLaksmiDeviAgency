@@ -39,12 +39,6 @@ const exportSchema = new mongoose.Schema({
     totalReceivable:{
         type:Number,
     },
-    received:{
-        type:Number,
-    },
-    balance:{
-        type:Number,
-    },
     parentProduct:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Product",

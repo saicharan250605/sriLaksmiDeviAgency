@@ -5,6 +5,7 @@ let itemsOuterDivContainer = document.querySelector("#itemsOuterDivContainer");
 let xmark_addItem = document.querySelector(".xmark_addItem");
 let itemsInnerDiv2 = document.querySelector("#itemsInnerDiv2");
 let itemInput = document.querySelector("#itemInput");
+let body = document.querySelector("body");
 
 addItemBtn.addEventListener("click",handler1);
 itemAddForm.addEventListener("submit",handler2);
@@ -45,16 +46,18 @@ for(let i of itemDeleteForm){
 }
 xmark_del_item.addEventListener("click",handler16);
 function itemDeleteHandler(event){
+    body.style.overflow="hidden";
     itemsOuterDivContainer.style.pointerEvents="none";
     itemsOuterDivContainer.style.opacity='0';
     navbar.style.pointerEvents="none";
     deleteConfirmation_div_item.style.display="flex";
-    deleteConfirmation_div_item.children[1].innerText = `Are you sure, you want to delete sub product "${event.target.parentElement.previousElementSibling.innerText}"`;
+    deleteConfirmation_div_item.children[1].innerText = `Are you sure, you want to delete item "${event.target.parentElement.previousElementSibling.innerText}"`;
     deleteConfirm_btn_item.addEventListener("click",()=>{
         event.target.parentElement.submit();
     });
 }
 function handler16(){
+    body.style.overflow="auto";
     itemsOuterDivContainer.style.pointerEvents="all";
     itemsOuterDivContainer.style.opacity='1';
     navbar.style.pointerEvents="all";

@@ -42,12 +42,6 @@ const importSchema = new mongoose.Schema({
     totalSpendable:{
         type:Number,
     },
-    paid:{
-        type:Number,
-    },
-    balance:{
-        type:Number,
-    },
     parentProduct:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Product",
