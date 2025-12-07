@@ -80,6 +80,7 @@ app.use("/",(req,res,next)=>{
     if(req.method !== "DELETE"){
         req.session.originalUrl = req.originalUrl;
     }
+    console.log(req.method);
     if(req.method === "GET"){
         res.locals.success = req.flash("success"); 
         res.locals.error = req.flash("error");
@@ -447,7 +448,6 @@ app.post("/add/exports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     }
     await newExport.save();
     let currDealer = await dealerClass.findOne({name:req.body.exporting.dealer.split("_")[1].trim(), shopName:req.body.exporting.dealer.split("_")[0].trim()});
-    // console.log(currDealer);
     currDealer.invoices.push(newExport);
     await currDealer.save();
     selectedProduct.export.push(newExport);
