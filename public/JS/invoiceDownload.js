@@ -118,9 +118,9 @@ for(let i of paymentAmount){
     }
 }
 if(totalExportAmount + totalPaymentAmount >=0){
-    receivable_amount.innerText = Math.abs(totalExportAmount + totalPaymentAmount);
+    receivable_amount.innerText = Math.abs(totalExportAmount + totalPaymentAmount).toLocaleString("en-IN");
     payable_amount.innerText = 0;
 }else if(totalExportAmount + totalPaymentAmount < 0){
     receivable_amount.innerText = 0;
-    payable_amount.innerText = Math.abs(totalExportAmount + totalPaymentAmount);
+    payable_amount.innerText = Math.abs(totalExportAmount + totalPaymentAmount).toLocaleString("en-IN");
 }
