@@ -32,6 +32,7 @@ const sellClass = require("./models/sell.js");
 const dealerClass = require("./models/dealerClass.js");
 const userClass = require("./models/userModel.js");
 const importPlaceClass = require("./models/ImportingPlace.js");
+const moneyClass = require("./models/amountClass.js");
 
 const port = 8000;
 app.listen(port,"0.0.0.0",()=>{
@@ -80,7 +81,6 @@ app.use("/",(req,res,next)=>{
     if(req.method !== "DELETE"){
         req.session.originalUrl = req.originalUrl;
     }
-    console.log(req.method);
     if(req.method === "GET"){
         res.locals.success = req.flash("success"); 
         res.locals.error = req.flash("error");
@@ -322,7 +322,55 @@ app.delete("/delete/dealer/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     res.redirect("/allDealersInvoicelist");
 }));
 
-//////////////////////////////////// ADDING IMPORT PLACE OR DEALER ////////////////////////////
+//////////////////////////////////////////// DEALER WISE LIST ///////////////////////////////////////////
+app.get("/allDealersInvoicelist",asyncwrap(async(req,res)=>{
+    const allDealersObjects = await dealerClass.find();
+    res.render("listings/allDealers_info.ejs",{allDealersObjects});
+}));
+
+//////////////////////////////////////////// DEALER WISE INVOICE LIST ///////////////////////////////////////////
+app.get("/allexp/dealer/:id",asyncwrap(async(req,res)=>{
+    const {id} = req.params;
+    const indDealersObject = await dealerClass.findById(id);
+    let currDealerInfo = {};
+    let [exportArr, paymentsArr] = await Promise.all([
+        exportClass.find({_id:{$in: indDealersObject.invoices}}),
+        moneyClass.find({_id:{$in :indDealersObject.amount}}),
+    ]);
+    currDealerInfo["name"] = indDealersObject.name;
+    currDealerInfo["id"] = indDealersObject._id;
+    currDealerInfo["gst"]=indDealersObject.gstNumber;
+    currDealerInfo["shopName"] = indDealersObject.shopName;
+    currDealerInfo["city"] = indDealersObject.city;
+    currDealerInfo["exports"] = exportArr;
+    currDealerInfo["payments"] = paymentsArr;
+    res.render("listings/allDealers_invoices.ejs",{currDealerInfo});
+}));
+
+//////////////////////////////////////// ADDING DEALER PAYMENT /////////////////////////////////////////
+app.post("/addPayment/:id",asyncwrap(async(req,res)=>{
+    const {id} = req.params;
+    let currDealer = await dealerClass.findById(id);
+    let newPayment = new moneyClass(req.body.dealerPayment);
+    currDealer.amount.push(newPayment);
+    await newPayment.save();
+    await currDealer.save();
+    req.flash("success",`Payment of ${currDealer.name} is added successfully`);
+    res.redirect(`/allexp/dealer/${id}`);
+}));
+
+////////////////////////////////////// DELETING PAYMENT ///////////////////////////////////////////
+app.delete("/delete/payment/:dealerOrCompany/:dealerId/:paymentId",asyncwrap(async(req,res)=>{
+    const {dealerOrCompany, dealerId, paymentId} = req.params;
+    if(dealerOrCompany === "dealer"){
+        await dealerClass.findByIdAndUpdate(dealerId,{$pull:{amount:paymentId}});
+        await moneyClass.findByIdAndDelete(paymentId);
+    }
+    req.flash("success","payment deleted successfully");
+    res.redirect(req.session.originalUrl);
+}));
+
+//////////////////////////////////// ADDING IMPORT COMPANY ////////////////////////////
 app.get("/addimportPlace",asyncwrap(async(req,res)=>{
     let allImportPlaces = await importPlaceClass.find().select("city companyName");
     res.render("listings/addImportPlaceForm.ejs",{allImportPlaces});
@@ -333,7 +381,7 @@ app.post("/addimportPlace",async(req,res)=>{
     req.flash("success","Import place added successfully");
     res.redirect("/allLists");
 });
-//////////////////////////////////// DISPLAYING ALL IMPORTS OF INDIVIDUAL PLACES or DEALERS ///////////////////////////////
+//////////////////////////////////// DISPLAYING ALL IMPORTS FROM COMPANIES ///////////////////////////////
 app.get("/indInvoices_ImportPlace",asyncwrap(async(req,res)=>{
     let allImportPlaces = await importPlaceClass.find();
     res.render("listings/allPlacesImports.ejs",{allImportPlaces});
@@ -477,6 +525,7 @@ app.delete("/delete/export/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     }
     await currProduct.save();
     await productTypeClass.findByIdAndUpdate(curr_export_invoice.parentProduct,{$pull:{export:id}});
+    await dealerClass.findOneAndUpdate({name:curr_export_invoice.dealer.split("_")[1].trim(), shopName:curr_export_invoice.dealer.split("_")[0].trim()},{$pull:{invoices:id}});
     await exportClass.findByIdAndDelete(id);
     req.flash("success","export invoice deleted successfully");
     res.redirect(req.session.originalUrl);
@@ -538,26 +587,6 @@ app.delete("/delete/indSales/:id",isUserLoggedin,asyncwrap(async(req,res)=>{
     await sellClass.findByIdAndDelete(id);
     req.flash("success","individual sales invoice deleted successfully");
     res.redirect(req.session.originalUrl);
-}));
-
-//////////////////////////////////////////// DEALER WISE LIST ///////////////////////////////////////////
-app.get("/allDealersInvoicelist",asyncwrap(async(req,res)=>{
-    const allDealersObjects = await dealerClass.find();
-    res.render("listings/allDealers_info.ejs",{allDealersObjects});
-}));
-
-//////////////////////////////////////////// DEALER WISE INVOICE LIST ///////////////////////////////////////////
-app.get("/allexp/dealer/:id",asyncwrap(async(req,res)=>{
-    const {id} = req.params;
-    const indDealersObject = await dealerClass.findById(id);
-    let currDealerInfo = {};
-    let [exportArr] = await Promise.all([exportClass.find({_id:{$in: indDealersObject.invoices}})]);
-    currDealerInfo["name"] = indDealersObject.name;
-    currDealerInfo["gst"]=indDealersObject.gstNumber;
-    currDealerInfo["shopName"] = indDealersObject.shopName;
-    currDealerInfo["city"] = indDealersObject.city;
-    currDealerInfo["exports"] = exportArr;
-    res.render("listings/allDealers_invoices.ejs",{currDealerInfo});
 }));
 
 ///////////////////////////////////////////  ALL INVOICES LIST ///////////////////////////////////////

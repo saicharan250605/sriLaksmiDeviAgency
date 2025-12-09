@@ -14,12 +14,28 @@
                 background-color: white;
                 border-radius: 7px;
                 display:flex;
-                flex-direction: column;
-                justify-content: center;">
-                    <div style="color: #00BFFF;font-size: 25px;font-weight: 550; margin-left: 20px;text-transform: capitalize;">
-                        Dealer <%=currDealerInfo.name.toLowerCase()%> export invoices
+                align-items: center;">
+                    <div style="width:75%;height:75%;box-sizing: border-box;padding-left: 15px;">
+                        <div style="color: #00BFFF;font-size: 25px;font-weight: 550;text-transform: capitalize;">
+                            Dealer <%=currDealerInfo.name.toLowerCase()%> export invoices
+                        </div>
+                        <div style="font-size: 15px;">Manage and track all your export invoices</div>
                     </div>
-                    <div style="margin-left: 20px;font-size: 15px;">Manage and track all your export invoices</div>
+                    <%if(reqUser !== undefined){%>
+                    <div id="addPayment_dealer" style="width:25%;
+                    height:75%;
+                    color:rgb(248, 144, 201);
+                    font-size: 19px;
+                    display: flex;
+                    align-items: center;
+                    justify-content:end;
+                    box-sizing: border-box;
+                    padding-right: 25px;
+                    cursor: pointer;
+                    font-weight: 550;">
+                        Add Payment
+                    </div>
+                    <%}%>
                 </div>
             </div>
         </div>
@@ -84,39 +100,81 @@
             </tr>
             <% } %>
         </table>
+        <br><br>
+        <table id="indDealer_payments_table">
+            <caption style="background: linear-gradient(to right, rgb(249, 115, 22), rgb(234, 88, 12));">Payments</caption>
+            <tr class="all_invoices_rows" style="background: linear-gradient(to right, rgb(255, 237, 213), rgb(254, 215, 170));">
+                <th>Date</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Transaction id</th>
+                <%if(reqUser !== undefined){%><th>Delete</th><%}%>
+            </tr>
+            <% for(let i of currDealerInfo.payments){ %>
+                <tr class="all_invoices_rows">
+                    <td class="all_invoices_data_rows"><%= new Date(i.date).toLocaleDateString()%></td>
+                    <td class="all_invoices_data_rows"<%if(i.amountType === "RECEIVED"){%>style="color:#4CBB17;font-weight:650;"<%}else{%>style="color:red;font-weight:650;"<%}%>><%=i.amountType%></td>
+                    <td class="all_invoices_data_rows"><%=i.money%></td>
+                    <td class="all_invoices_data_rows"><%=i.transactionId || "null"%></td>  
+                    <%if(reqUser !== undefined){%>
+                        <td class="all_invoices_data_rows">
+                            <form action="/delete/payment/dealer/<%=currDealerInfo.id%>/<%=i._id%>?_method=DELETE" method="post" class="delete_payment_dealer">
+                                <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                            </form>
+                        </td> 
+                    <%}%>
+                </tr>
+            <% } %>
+        </table>
+        <br>
+        <div id="net_outstanding_balance_holder_div">
+            <div style="width: 60%;height:100%;display: flex;">
+                <div style="width:34%;margin-left: auto;text-align: center;box-sizing: border-box;padding-top: 5px;">Net Outstanding Balance :</div>
+                <table style="width:33%;border:1px solid black;">
+                    <tr style="height: 45%;">
+                        <th>Receivable</th>
+                        <th>Payable</th>
+                    </tr>
+                    <tr style="height:55%;">
+                        <td style="border-right: 1px solid black;text-align: center;color:#009E60;font-weight: 550;" id="receivable_amount"></td>
+                        <td style="text-align: center;color:red;font-weight: 550;" id="payable_amount"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
     <div id="deleteConfirmation_div_dealer_invoice">
         <i class="fa-solid fa-xmark xmark_del_dealer_invoice"></i>
         <span></span>
         <div id="deleteConfirm_btn_dealer_invoice">Delete</div>
     </div>
-    <script>
-        const deleteDealer_invoiceForm = document.querySelectorAll(".deleteDealer_invoiceForm");
-        const deleteConfirmation_div_dealer_invoice = document.querySelector("#deleteConfirmation_div_dealer_invoice");
-        const xmark_del_dealer_invoice = document.querySelector(".xmark_del_dealer_invoice");
-        const deleteConfirm_btn_dealer_invoice = document.querySelector("#deleteConfirm_btn_dealer_invoice");
-        const indDealer_invoicesHolder = document.querySelector("#indDealer_invoicesHolder");
-        const navbar = document.querySelector("#navbar");
-        for(let i of deleteDealer_invoiceForm){
-            i.children[0].addEventListener('click',dealerDelete_handler);
-        }
-        xmark_del_dealer_invoice.addEventListener("click",()=>{
-            indDealer_invoicesHolder.style.display="flex";
-            deleteConfirmation_div_dealer_invoice.style.display="none";
-            navbar.style.pointerEvents="all";
-        });
-        function dealerDelete_handler(event){
-            navbar.style.pointerEvents="none";
-            indDealer_invoicesHolder.style.display="none";
-            deleteConfirmation_div_dealer_invoice.style.display="flex";
-            deleteConfirmation_div_dealer_invoice.children[1].innerText=`Are you sure, you want to delete invoice dated on ${event.target.parentElement.parentElement.parentElement.children[0].innerText}?`;
-            deleteConfirm_btn_dealer_invoice.addEventListener("click",()=>{
-                event.target.parentElement.submit();
-            });
-        }
-    </script>
+    <div id="deleteConfirmation_div_dealer_payment">
+        <i class="fa-solid fa-xmark xmark_del_dealer_payment"></i>
+        <span></span>
+        <div id="deleteConfirm_btn_dealer_payment">Delete</div>
+    </div>
+    <div id="addPayment_dealerForm_holder_div">
+        <form action="/addPayment/<%=currDealerInfo.id%>" id="addPayment_dealer_form" method="post">
+        <i class="fa-solid fa-xmark xmark_addPayment_dealer"></i>
+        <label for="addPayment_dealer_date">Date of payment</label>
+        <input type="date" id="addPayment_dealer_date" name="dealerPayment[date]" required>
+        <label for="addPayment_dealer_paymentType">Transaction type</label>
+        <select name="dealerPayment[amountType]" id="addPayment_dealer_paymentType" required>
+            <option value="" hidden disable>select any one payment type</option>
+            <option value="received">Received</option>
+            <option value="paid">Paid</option>
+        </select>
+        <label for="addPayment_dealer_amount">Amount paid</label>
+        <input type="number" step="any" id="addPayment_dealer_amount" name="dealerPayment[money]" placeholder="Enter amount debited or credited" required>
+        <label for="addPayment_dealer_transactionId">Transaction id</label>
+        <input type="text" id="addPayment_dealer_transactionId" name="dealerPayment[transactionId]" placeholder="Enter Transaction id" required>
+        <button id="addpayment_dealer_form_submitBtn">ADD</button>
+        </form>
+    </div>
     <script>
         const currDealerInfo = <%-JSON.stringify(currDealerInfo)%>; 
+        const exportsAmount = <%-JSON.stringify(currDealerInfo.exports)%>;
+        const paymentAmount = <%-JSON.stringify(currDealerInfo.payments)%>;
     </script>
     <script src="/JS/invoiceDownload.js"></script>
 </body>

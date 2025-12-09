@@ -124,6 +124,10 @@ caption{
     flex-direction: column;
     align-items: center;
 }
-#indDealer_exports_table{
+#indDealer_exports_table,#indDealer_payments_table{
     width:90%;
+}
+#net_outstanding_balance_holder_div{
+    width:90%;
+    height:80px;
 }

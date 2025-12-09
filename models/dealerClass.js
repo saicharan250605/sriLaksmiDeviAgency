@@ -18,6 +18,10 @@ const dealerSchema = new mongoose.Schema({
     invoices:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Export",
+    }],
+    amount:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"money",
     }]
 });
 
