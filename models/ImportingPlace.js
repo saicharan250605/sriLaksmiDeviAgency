@@ -14,6 +14,10 @@ const importPlace_Schema = new mongoose.Schema({
     invoices:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"ImportSchema",
+    }],
+    amount:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"money",
     }]
 });
 

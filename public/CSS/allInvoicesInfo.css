@@ -46,9 +46,6 @@ th{
     border: 1px solid black;
     border-collapse: collapse;
 }
-.all_invoices_rows{
-    height:45px;
-}
 .all_invoices_data_rows {
     border: 1px solid black;
     border-collapse: collapse;
@@ -68,17 +65,16 @@ th{
     flex-direction: column;
     row-gap: 10px;
     display:flex;
-    z-index: 9999;
-    opacity:0;
-    transform: scale(0.95); 
-    pointer-events: none;
-    transition:all 0.3s ease-in-out;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.3s linear;
+    z-index: 1;
     box-shadow:
     0 15px 20px rgba(0, 0, 0, 0.6),  /* heavy drop shadow */
     0 0 15px rgba(0, 51, 102, 0.5);  /* faint outer glow */
 }
 .all_invoices_rows:hover > .all_invoices_data_rows > div{
-    opacity:1;
+    opacity: 1;
     pointer-events: all;
     transform: scale(1); 
 }
@@ -97,37 +93,41 @@ caption{
 
 /* //////////////////////////////////////////////// ALL DEALERS INVOICES INGOFO //////////////////////////////////////////// */
 
-.all_dealers_table_rows{
+.all_dealers_table_rows, .all_invoices_rows,.all_Companies_table_rows{
     height:45px;
 }
-.all_dealers_table_rows_data{
+.all_dealers_table_rows_data, .all_Companies_table_rows_data{
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
 }
-.all_dealers_table_anchor_tag{
+.all_dealers_table_anchor_tag, .all_companies_table_anchor_tag{
     text-decoration: none;
     color:black;
     cursor:pointer;
 }
-#allDealers_table_holder{
+#allDealers_table_holder, #importCompany_table_holder{
     width:100%;
+    margin-top: 35px;
     display: flex;
     justify-content: center;
 }
 #allDealers_table{
     width:80%;
 }
-#indDealer_invoicesHolder{
+#indDealer_invoicesHolder ,#indCompany_invoicesHolder{
     width:100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-#indDealer_exports_table,#indDealer_payments_table{
+#indDealer_exports_table,#indDealer_payments_table, #indCompany_imports_table ,#indCompany_payments_table{
     width:90%;
 }
-#net_outstanding_balance_holder_div{
+#importCompany_table{
+    width:75%;
+}
+.net_outstanding_balance_holder_div{
     width:90%;
     height:80px;
 }

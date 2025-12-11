@@ -465,7 +465,7 @@ input{
     background-color: rgb(232, 232, 232);
     display:none;
 }
-#deleteConfirmation_div_dealer_invoice, #deleteConfirmation_div_dealer_payment{
+#deleteConfirmation_div_dealer_invoice, #deleteConfirmation_div_dealer_payment, #deleteConfirmation_div_company_payment, #deleteConfirmation_div_company_invoice{
     position: fixed;
     top:50%;
     left:50%;
@@ -480,7 +480,7 @@ input{
     background-color: rgb(232, 232, 232);
     display:none;
 }
-#addPayment_dealerForm_holder_div{
+#addPayment_dealerForm_holder_div, #addPayment_companyForm_holder_div{
     position: fixed;
     width:380px;
     height:345px;
@@ -493,7 +493,7 @@ input{
     padding: 15px;
     display: none;
 }
-#addPayment_dealer_form{
+#addPayment_dealer_form, #addPayment_company_form{
     height:100%;
     width:100%;
     display: flex;
@@ -505,7 +505,7 @@ input{
     border:1px solid gray;
     margin-bottom: 10px;
 }
-#addpayment_dealer_form_submitBtn{
+#addpayment_dealer_form_submitBtn, #addpayment_company_form_submitBtn{
     height:30px;
     width:100px;
     border-radius: 5px;
@@ -515,7 +515,7 @@ input{
     color:#000;
     font-size: 16px;
 }
-.xmark_addPayment_dealer{
+.xmark_addPayment_dealer, .xmark_addPayment_company{
     margin-left: auto;
     color:gray;
     cursor: pointer;
@@ -590,7 +590,7 @@ input{
     padding:7px 15px;
     cursor: pointer;
 }
-#deleteConfirm_btn_dealer_invoice, #deleteConfirm_btn_dealer_payment{
+#deleteConfirm_btn_dealer_invoice, #deleteConfirm_btn_dealer_payment, #deleteConfirm_btn_company_payment, #deleteConfirm_btn_company_invoice{
     margin-top: auto;
     margin-left: auto;
     margin-right: 10px;
@@ -642,7 +642,7 @@ input{
     margin-bottom: 8px;
     cursor: pointer;
 }
-.xmark_del_dealer_invoice, .xmark_del_dealer_payment{
+.xmark_del_dealer_invoice, .xmark_del_dealer_payment, .xmark_del_company_payment, .xmark_del_company_invoice{
     color:gray;
     margin-left: auto;
     margin-bottom: 8px;

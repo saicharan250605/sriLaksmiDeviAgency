@@ -348,22 +348,35 @@ app.get("/allexp/dealer/:id",asyncwrap(async(req,res)=>{
 }));
 
 //////////////////////////////////////// ADDING DEALER PAYMENT /////////////////////////////////////////
-app.post("/addPayment/:id",asyncwrap(async(req,res)=>{
-    const {id} = req.params;
-    let currDealer = await dealerClass.findById(id);
-    let newPayment = new moneyClass(req.body.dealerPayment);
-    currDealer.amount.push(newPayment);
-    await newPayment.save();
-    await currDealer.save();
-    req.flash("success",`Payment of ${currDealer.name} is added successfully`);
-    res.redirect(`/allexp/dealer/${id}`);
+app.post("/addPayment/:type/:id",asyncwrap(async(req,res)=>{
+    const {type, id} = req.params;
+    if(type === "dealer"){
+        let currDealer = await dealerClass.findById(id);
+        let newPayment = new moneyClass(req.body.dealerPayment);
+        currDealer.amount.push(newPayment);
+        await newPayment.save();
+        await currDealer.save();
+        req.flash("success",`Payment of ${currDealer.name} is added successfully`);
+        res.redirect(`/allexp/dealer/${id}`);
+    }else if(type === "company"){
+        let currCompany = await importPlaceClass.findById(id);
+        let newPayment = new moneyClass(req.body.companyPayment);
+        currCompany.amount.push(newPayment);
+        await newPayment.save();
+        await currCompany.save();
+        req.flash("success",`payment of ${currCompany.companyName} is added successfully`);
+        res.redirect(`/allimp/company/${id}`);
+    }
 }));
 
 ////////////////////////////////////// DELETING PAYMENT ///////////////////////////////////////////
-app.delete("/delete/payment/:dealerOrCompany/:dealerId/:paymentId",asyncwrap(async(req,res)=>{
-    const {dealerOrCompany, dealerId, paymentId} = req.params;
+app.delete("/delete/payment/:dealerOrCompany/:dealerorCompanyId/:paymentId",asyncwrap(async(req,res)=>{
+    const {dealerOrCompany, dealerorCompanyId, paymentId} = req.params;
     if(dealerOrCompany === "dealer"){
-        await dealerClass.findByIdAndUpdate(dealerId,{$pull:{amount:paymentId}});
+        await dealerClass.findByIdAndUpdate(dealerorCompanyId,{$pull:{amount:paymentId}});
+        await moneyClass.findByIdAndDelete(paymentId);
+    }else if(dealerOrCompany === "company"){
+        await importPlaceClass.findByIdAndUpdate(dealerorCompanyId,{$pull:{amount:paymentId}});
         await moneyClass.findByIdAndDelete(paymentId);
     }
     req.flash("success","payment deleted successfully");
@@ -381,10 +394,17 @@ app.post("/addimportPlace",async(req,res)=>{
     req.flash("success","Import place added successfully");
     res.redirect("/allLists");
 });
-//////////////////////////////////// DISPLAYING ALL IMPORTS FROM COMPANIES ///////////////////////////////
+//////////////////////////////////// DISPLAYING ALL COMPANIES ///////////////////////////////
 app.get("/indInvoices_ImportPlace",asyncwrap(async(req,res)=>{
-    let allImportPlaces = await importPlaceClass.find();
-    res.render("listings/allPlacesImports.ejs",{allImportPlaces});
+    let allImportPlaces = await importPlaceClass.find().select("_id companyName city gstNumber");
+    res.render("listings/allCompanies_info.ejs",{allImportPlaces});
+}));
+
+//////////////////////////////////// DISPLAYING ALL IMPORTS FROM COMPANIES ///////////////////////////////
+app.get("/allimp/company/:id",asyncwrap(async(req,res)=>{
+    const {id} = req.params;
+    let allImpInvoices_indCompany = await importPlaceClass.findById(id).select("invoices amount").populate({path:"invoices"}).populate({path:"amount"}).lean();
+    res.render("listings/allCompanies_invoices.ejs",{allImpInvoices_indCompany});
 }));
 //////////////////////////////////// ADDING IMPORT /////////////////////////////////////////
 app.post("/add/imports/:id",isUserLoggedin,asyncwrap(async(req,res)=>{

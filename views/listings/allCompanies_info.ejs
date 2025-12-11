@@ -1,0 +1,27 @@
+<% layout("/layouts/boilerPlate") %>
+<body>
+    <div id="importCompany_table_holder">
+        <table id="importCompany_table">
+            <tr class="all_Companies_table_rows" style="background: linear-gradient(125deg, #80ffdb61, #48bfe358, #5390d946, #5e60ce56);">
+                <th>Company Name</th>
+                <th>City</th>
+                <th>GST Number</th>
+                <%if(reqUser !== undefined){%> <th>Delete</th> <%}%>
+            </tr>
+            <% for(let i of allImportPlaces){ %>
+                <tr class="all_Companies_table_rows">
+                    <td class="all_Companies_table_rows_data"><a href="/allimp/company/<%=i._id%>" class="all_companies_table_anchor_tag"><%=i.companyName%></a></td>
+                    <td class="all_Companies_table_rows_data"><%=i.city%></td>
+                    <td class="all_Companies_table_rows_data"><%=i.gstNumber%></td>
+                    <%if(reqUser !== undefined){%> 
+                        <td class="all_Companies_table_rows_data">
+                            <form action="" method="post" class="hi">
+                                <i class="fa-solid fa-trash-can" style="color:red;cursor:pointer;"></i>
+                            </form>
+                        </td>
+                    <%}%>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+</body>
