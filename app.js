@@ -678,9 +678,9 @@ app.get("/logout",(req,res)=>{
 });
 
 //////////////////////////////////////////// ERROR HANDLING FUNCTIONS ///////////////////////////////////////////////
-// app.use((req,res,next)=>{
-//     throw new Error(401,"401 Page Not Found");
-// });
-// app.use((err,req,res,next)=>{
-//     res.render("listings/errorPage.ejs",{err});
-// });
+app.use((req,res,next)=>{
+    throw new Error(401,"401 Page Not Found");
+});
+app.use((err,req,res,next)=>{
+    res.render("listings/errorPage.ejs",{err});
+});
